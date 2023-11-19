@@ -1,17 +1,16 @@
 package com.thebrownfoxx.petrealm.realm
 
-import io.realm.kotlin.Realm
-import io.realm.kotlin.RealmConfiguration
-import io.realm.kotlin.ext.query
-import org.mongodb.kbson.ObjectId
 import com.thebrownfoxx.petrealm.realm.models.RealmOwner
 import com.thebrownfoxx.petrealm.realm.models.RealmPet
 import com.thebrownfoxx.petrealm.realm.models.RealmPetType
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.ext.query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import java.lang.IllegalStateException
+import org.mongodb.kbson.ObjectId
 
 class PetRealmDatabase {
     private val config = RealmConfiguration.Builder(
@@ -29,53 +28,19 @@ class PetRealmDatabase {
 
     fun getAllPets(): Flow<List<RealmPet>> = realm.query<RealmPet>().asFlow().map { it.list }
 
-//    fun getPetsByName(name: String): List<PetRealm> {
-//        return realm.query<PetRealm>("name CONTAINS $0", name).find()
-//    }
-
-//    suspend fun addPet(
-//        name: String,
-//        age: Int,
-//        type: RealmPetType,
-//        ownerName: String = "",
-//    ) {
-//        realm.write {
-//            val pet = RealmPet().apply {
-//                this.name = name
-//                this.age = age
-//                this.type = type
-//            }
-//            val managedPet = copyToRealm(pet)
-//            if (ownerName.isNotEmpty()) {
-//                val ownerResult: RealmOwner? =
-//                    realm.query<RealmOwner>("name == $0", ownerName).first().find()
-//                if (ownerResult == null) {
-//                    val owner = RealmOwner().apply {
-//                        this.name = ownerName
-//                        this.pets.add(managedPet)
-//                    }
-//                    val managedOwner = copyToRealm(owner)
-//                    managedPet.owner = managedOwner
-//                } else {
-//                    findLatest(ownerResult)?.pets?.add(managedPet)
-//                    findLatest(managedPet)?.owner = findLatest(ownerResult)
-//                }
-//            }
-//        }
-//    }
-
     suspend fun addPet(
         name: String,
         age: Int,
-        type: String = "",
+        typeId: ObjectId,
         ownerName: String = "",
     ) {
         withContext(Dispatchers.IO) {
             realm.write {
+                val petType = realm.query<RealmPetType>("id == $0", typeId).first().find()
                 val pet = RealmPet().apply {
                     this.name = name
                     this.age = age
-                    this.type = type
+                    this.type = petType
                 }
                 val managedPet = copyToRealm(pet)
                 if (ownerName.isNotEmpty()) {

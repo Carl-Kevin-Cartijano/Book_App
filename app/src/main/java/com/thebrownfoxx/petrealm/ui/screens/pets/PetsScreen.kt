@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.thebrownfoxx.components.extension.Elevation
 import com.thebrownfoxx.components.extension.plus
 import com.thebrownfoxx.petrealm.models.Pet
+import com.thebrownfoxx.petrealm.models.PetType
 import com.thebrownfoxx.petrealm.models.Sample
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
 
@@ -29,6 +30,7 @@ fun PetsScreen(
     pets: List<Pet>,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
+    petTypes: List<PetType>,
     addPetDialogState: AddPetDialogState,
     addPetDialogStateChangeListener: AddPetDialogStateChangeListener,
     removePetDialogState: RemovePetDialogState,
@@ -69,6 +71,7 @@ fun PetsScreen(
     }
 
     AddPetDialog(
+        petTypes = petTypes,
         state = addPetDialogState,
         stateChangeListener = addPetDialogStateChangeListener,
     )
@@ -86,12 +89,14 @@ fun PetsScreenPreview() {
             pets = Sample.Pets,
             searchQuery = "",
             onSearchQueryChange = {},
+            petTypes = listOf(),
             addPetDialogState = AddPetDialogState.Hidden,
             addPetDialogStateChangeListener = AddPetDialogStateChangeListener(
                 onShowAddPetDialog = {},
                 onHideAddPetDialog = {},
                 onPetNameChange = {},
                 onPetAgeChange = {},
+                onPetTypeDropdownExpandedChange = {},
                 onPetTypeChange = {},
                 onHasOwnerChange = {},
                 onOwnerNameChange = {},

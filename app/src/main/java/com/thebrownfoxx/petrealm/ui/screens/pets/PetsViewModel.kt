@@ -3,9 +3,11 @@ package com.thebrownfoxx.petrealm.ui.screens.pets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hamthelegend.enchantmentorder.extensions.combineToStateFlow
+import com.hamthelegend.enchantmentorder.extensions.mapToStateFlow
 import com.hamthelegend.enchantmentorder.extensions.search
 import com.thebrownfoxx.petrealm.models.Owner
 import com.thebrownfoxx.petrealm.models.Pet
+import com.thebrownfoxx.petrealm.models.PetType
 import com.thebrownfoxx.petrealm.realm.PetRealmDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,6 +18,18 @@ import org.mongodb.kbson.ObjectId
 class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
+
+    val petTypes = database.getAllPetTypes().mapToStateFlow(
+        scope = viewModelScope,
+        initialValue = emptyList(),
+    ) { realmPetTypes ->
+        realmPetTypes.map { realmPetType ->
+            PetType(
+                id = realmPetType.id.toHexString(),
+                name = realmPetType.name,
+            )
+        }
+    }
 
     val pets = combineToStateFlow(
         database.getAllPets(),
@@ -28,7 +42,12 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
                 id = realmPet.id.toHexString(),
                 name = realmPet.name,
                 age = realmPet.age,
-                type = realmPet.type,
+                type = realmPet.type?.let { realmPetType ->
+                    PetType(
+                        id = realmPetType.id.toHexString(),
+                        name = realmPetType.name,
+                    )
+                },
                 owner = realmPet.owner?.let { realmOwner ->
                     Owner(
                         id = realmOwner.id.toHexString(),
@@ -52,13 +71,13 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         _searchQuery.update { newQuery }
     }
 
-    fun showPetDialog() {
+    fun showAddPetDialog() {
         _addPetDialogState.update { state ->
             if (state == AddPetDialogState.Hidden) AddPetDialogState.Visible() else state
         }
     }
 
-    fun hidePetDialog() {
+    fun hideAddPetDialog() {
         _addPetDialogState.update { AddPetDialogState.Hidden }
     }
 
@@ -88,12 +107,21 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         }
     }
 
-    fun updatePetType(newPetType: String) {
+    fun updatePetTypeDropdownExpanded(newVisible: Boolean) {
+        _addPetDialogState.update {
+            if (it is AddPetDialogState.Visible) {
+                it.copy(petTypeDropdownExpanded = newVisible)
+            } else it
+        }
+    }
+
+    fun updatePetType(newPetType: PetType) {
         _addPetDialogState.update {
             if (it is AddPetDialogState.Visible) {
                 it.copy(
                     petType = newPetType,
                     hasPetTypeWarning = false,
+                    petTypeDropdownExpanded = false,
                 )
             } else it
         }
@@ -105,6 +133,7 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
                 it.copy(
                     hasOwner = newHasOwner,
                     ownerName = if (!newHasOwner) "" else it.ownerName,
+                    hasOwnerNameWarning = if (!newHasOwner) false else it.hasOwnerNameWarning,
                 )
             } else it
         }
@@ -123,24 +152,23 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
 
     fun addPet() {
         var state = addPetDialogState.value
-        with(state) {
-            if (this is AddPetDialogState.Visible) {
-                if (petName.isBlank()) state = copy(hasPetNameWarning = true)
-                if (petAge == null) state = copy(hasPetAgeWarning = true)
-                if (petType.isBlank()) state = copy(hasPetTypeWarning = true)
-                if (hasOwner && ownerName.isBlank()) state = copy(hasOwnerNameWarning = true)
+        if (state is AddPetDialogState.Visible) {
+            if (state.petName.isBlank()) state = state.copy(hasPetNameWarning = true)
+            if (state.petAge == null) state = state.copy(hasPetAgeWarning = true)
+            if (state.petType == null) state = state.copy(hasPetTypeWarning = true)
+            if (state.hasOwner && state.ownerName.isBlank()) state = state.copy(hasOwnerNameWarning = true)
 
-                if (!hasWarning) {
-                    viewModelScope.launch {
-                        database.addPet(
-                            name = petName,
-                            age = petAge!!,
-                            type = petType,
-                            ownerName = ownerName,
-                        )
-                    }
-                    state = AddPetDialogState.Hidden
+            val newState = state
+            if (!state.hasWarning) {
+                viewModelScope.launch {
+                    database.addPet(
+                        name = newState.petName,
+                        age = newState.petAge!!,
+                        typeId = ObjectId(newState.petType!!.id),
+                        ownerName = newState.ownerName,
+                    )
                 }
+                state = AddPetDialogState.Hidden
             }
         }
         _addPetDialogState.update { state }
@@ -161,5 +189,6 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
                 database.deletePet(id = ObjectId(state.pet.id))
             }
         }
+        _removePetDialogState.update { RemovePetDialogState.Hidden }
     }
 }

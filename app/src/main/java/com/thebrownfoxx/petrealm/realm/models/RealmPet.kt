@@ -9,7 +9,6 @@ class RealmPet: RealmObject {
     var id: ObjectId = ObjectId()
     var name: String = ""
     var age: Int = 0
-//    var type: RealmPetType? = null
-    var type: String = ""
+    var type: RealmPetType? = null
     var owner: RealmOwner? = null
 }

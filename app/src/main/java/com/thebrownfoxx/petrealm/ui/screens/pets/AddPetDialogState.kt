@@ -1,11 +1,14 @@
 package com.thebrownfoxx.petrealm.ui.screens.pets
 
+import com.thebrownfoxx.petrealm.models.PetType
+
 sealed class AddPetDialogState {
     data object Hidden : AddPetDialogState()
     data class Visible(
         val petName: String = "",
         val petAge: Int? = null,
-        val petType: String = "",
+        val petTypeDropdownExpanded: Boolean = false,
+        val petType: PetType? = null,
         val hasOwner: Boolean = false,
         val ownerName: String = "",
         val hasPetNameWarning: Boolean = false,
@@ -23,7 +26,8 @@ class AddPetDialogStateChangeListener(
     val onHideAddPetDialog: () -> Unit,
     val onPetNameChange: (String) -> Unit,
     val onPetAgeChange: (String) -> Unit,
-    val onPetTypeChange: (String) -> Unit,
+    val onPetTypeDropdownExpandedChange: (Boolean) -> Unit,
+    val onPetTypeChange: (PetType) -> Unit,
     val onHasOwnerChange: (Boolean) -> Unit,
     val onOwnerNameChange: (String) -> Unit,
     val onAddPet: () -> Unit
