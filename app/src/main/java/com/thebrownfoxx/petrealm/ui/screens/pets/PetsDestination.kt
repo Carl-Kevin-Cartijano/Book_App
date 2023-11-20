@@ -21,8 +21,8 @@ fun Pets(navigator: DestinationsNavigator) {
     with(viewModel) {
         val pets by pets.collectAsStateWithLifecycle()
         val searchQuery by searchQuery.collectAsStateWithLifecycle()
-//        val petTypes by petTypes.collectAsStateWithLifecycle()
-//        val addPetDialogState by addPetDialogState.collectAsStateWithLifecycle()
+        /*val petTypes by petTypes.collectAsStateWithLifecycle()
+        val addPetDialogState by addPetDialogState.collectAsStateWithLifecycle()*/
         val removePetDialogState by removePetDialogState.collectAsStateWithLifecycle()
 
         PetsScreen(
@@ -30,18 +30,18 @@ fun Pets(navigator: DestinationsNavigator) {
             searchQuery = searchQuery,
             onSearchQueryChange = ::updateSearchQuery,
             addPet = { navigator.navigate(AddPetDestination) },
-//            petTypes = petTypes,
-//            addPetDialogState = addPetDialogState,
-//            addPetDialogStateChangeListener = AddPetDialogStateChangeListener(
-//                onShowAddPetDialog = ::showAddPetDialog,
-//                onHideAddPetDialog = ::hideAddPetDialog,
-//                onPetNameChange = ::updatePetName,
-//                onPetAgeChange = ::updatePetAge,
-//                onPetTypeDropdownExpandedChange = ::updatePetTypeDropdownExpanded,
-//                onPetTypeChange = ::updatePetType,
-//                onOwnerNameChange = ::updateOwnerName,
-//                onAddPet = ::addPet
-//            ),
+            /*petTypes = petTypes,
+            addPetDialogState = addPetDialogState,
+            addPetDialogStateChangeListener = AddPetDialogStateChangeListener(
+                onShowAddPetDialog = ::showAddPetDialog,
+                onHideAddPetDialog = ::hideAddPetDialog,
+                onPetNameChange = ::updatePetName,
+                onPetAgeChange = ::updatePetAge,
+                onPetTypeDropdownExpandedChange = ::updatePetTypeDropdownExpanded,
+                onPetTypeChange = ::updatePetType,
+                onOwnerNameChange = ::updateOwnerName,
+                onAddPet = ::addPet
+            ),*/
             removePetDialogState = removePetDialogState,
             removePetDialogStateChangeListener = RemovePetDialogStateChangeListener(
                 onInitiateRemovePet = ::initiateRemovePet,
