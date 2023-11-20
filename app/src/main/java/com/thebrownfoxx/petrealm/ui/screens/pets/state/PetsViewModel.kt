@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.mongodb.kbson.ObjectId
 
 class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
@@ -71,14 +70,6 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         _searchQuery.update { newQuery }
     }
 
-    private fun updateVisibleAddPetDialogState(
-        block: AddPetDialogState.Visible.() -> AddPetDialogState.Visible,
-    ) {
-        _addPetDialogState.update { state ->
-            if (state is AddPetDialogState.Visible) state.block() else state
-        }
-    }
-
     fun showAddPetDialog() {
         _addPetDialogState.update { state ->
             if (state == AddPetDialogState.Hidden) AddPetDialogState.Visible() else state
@@ -88,6 +79,14 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
     fun hideAddPetDialog() {
         _addPetDialogState.update { state ->
             if (state is AddPetDialogState.Visible) AddPetDialogState.Hidden else state
+        }
+    }
+
+    private fun updateVisibleAddPetDialogState(
+        block: AddPetDialogState.Visible.() -> AddPetDialogState.Visible,
+    ) {
+        _addPetDialogState.update { state ->
+            if (state is AddPetDialogState.Visible) state.block() else state
         }
     }
 
@@ -145,7 +144,7 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
                     database.addPet(
                         name = newState.petName,
                         age = newState.petAge!!,
-                        typeId = ObjectId(newState.petType!!.id),
+                        typeId = org.mongodb.kbson.ObjectId(newState.petType!!.id),
                         ownerName = newState.ownerName,
                     )
                 }
@@ -167,7 +166,7 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         val state = removePetDialogState.value
         if (state is RemovePetDialogState.Visible) {
             viewModelScope.launch {
-                database.deletePet(id = ObjectId(state.pet.id))
+                database.deletePet(id = org.mongodb.kbson.ObjectId(state.pet.id))
             }
         }
         _removePetDialogState.update { RemovePetDialogState.Hidden }

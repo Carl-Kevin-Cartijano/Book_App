@@ -21,13 +21,9 @@ import androidx.compose.ui.unit.dp
 import com.thebrownfoxx.components.extension.Elevation
 import com.thebrownfoxx.components.extension.plus
 import com.thebrownfoxx.petrealm.models.Pet
-import com.thebrownfoxx.petrealm.models.PetType
 import com.thebrownfoxx.petrealm.models.Sample
-import com.thebrownfoxx.petrealm.ui.screens.pets.components.AddPetDialog
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.PetCard
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.RemovePetDialog
-import com.thebrownfoxx.petrealm.ui.screens.pets.state.AddPetDialogState
-import com.thebrownfoxx.petrealm.ui.screens.pets.state.AddPetDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogState
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
@@ -37,9 +33,10 @@ fun PetsScreen(
     pets: List<Pet>,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    petTypes: List<PetType>,
-    addPetDialogState: AddPetDialogState,
-    addPetDialogStateChangeListener: AddPetDialogStateChangeListener,
+    addPet: () -> Unit,
+//    petTypes: List<PetType>,
+//    addPetDialogState: AddPetDialogState,
+//    addPetDialogStateChangeListener: AddPetDialogStateChangeListener,
     removePetDialogState: RemovePetDialogState,
     removePetDialogStateChangeListener: RemovePetDialogStateChangeListener,
     modifier: Modifier = Modifier,
@@ -59,7 +56,7 @@ fun PetsScreen(
             }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = addPetDialogStateChangeListener.onShowAddPetDialog) {
+            FloatingActionButton(onClick = addPet) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = null)
             }
         },
@@ -76,12 +73,6 @@ fun PetsScreen(
             }
         }
     }
-
-    AddPetDialog(
-        petTypes = petTypes,
-        state = addPetDialogState,
-        stateChangeListener = addPetDialogStateChangeListener,
-    )
     RemovePetDialog(
         state = removePetDialogState,
         stateChangeListener = removePetDialogStateChangeListener,
@@ -96,18 +87,19 @@ fun PetsScreenPreview() {
             pets = Sample.Pets,
             searchQuery = "",
             onSearchQueryChange = {},
-            petTypes = listOf(),
-            addPetDialogState = AddPetDialogState.Hidden,
-            addPetDialogStateChangeListener = AddPetDialogStateChangeListener(
-                onShowAddPetDialog = {},
-                onHideAddPetDialog = {},
-                onPetNameChange = {},
-                onPetAgeChange = {},
-                onPetTypeDropdownExpandedChange = {},
-                onPetTypeChange = {},
-                onOwnerNameChange = {},
-                onAddPet = {},
-            ),
+            addPet = {},
+//            petTypes = listOf(),
+//            addPetDialogState = AddPetDialogState.Hidden,
+//            addPetDialogStateChangeListener = AddPetDialogStateChangeListener(
+//                onShowAddPetDialog = {},
+//                onHideAddPetDialog = {},
+//                onPetNameChange = {},
+//                onPetAgeChange = {},
+//                onPetTypeDropdownExpandedChange = {},
+//                onPetTypeChange = {},
+//                onOwnerNameChange = {},
+//                onAddPet = {},
+//            ),
             removePetDialogState = RemovePetDialogState.Hidden,
             removePetDialogStateChangeListener = RemovePetDialogStateChangeListener(
                 onInitiateRemovePet = {},

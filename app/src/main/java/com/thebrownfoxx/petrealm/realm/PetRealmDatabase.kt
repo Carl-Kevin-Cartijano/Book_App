@@ -40,7 +40,7 @@ class PetRealmDatabase {
                 val pet = RealmPet().apply {
                     this.name = name
                     this.age = age
-                    this.type = petType
+                    this.type = petType?.let { findLatest(petType) }
                 }
                 val managedPet = copyToRealm(pet)
                 if (ownerName.isNotEmpty()) {
