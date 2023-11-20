@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.ArrowBack
 import androidx.compose.material.icons.twotone.Clear
+import androidx.compose.material.icons.twotone.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -24,8 +26,8 @@ import com.thebrownfoxx.components.IconButton
 fun SearchTopBar(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
+    onNavigateUp: (() -> Unit)? = null,
     background: @Composable BoxScope.() -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior? = null,
     content: @Composable BoxScope.() -> Unit,
@@ -50,11 +52,18 @@ fun SearchTopBar(
                     focusedIndicatorColor = Color.Transparent,
                 ),
                 leadingIcon = {
-                    IconButton(
-                        imageVector = Icons.TwoTone.ArrowBack,
-                        contentDescription = null,
-                        onClick = onNavigateUp,
-                    )
+                    if (onNavigateUp != null) {
+                        IconButton(
+                            imageVector = Icons.TwoTone.ArrowBack,
+                            contentDescription = null,
+                            onClick = onNavigateUp,
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.TwoTone.Search,
+                            contentDescription = null,
+                        )
+                    }
                 },
                 trailingIcon = {
                     if (searchQuery != "") {

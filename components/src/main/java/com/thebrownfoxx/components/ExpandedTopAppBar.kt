@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.thebrownfoxx.components.extension.Elevation
 import com.thebrownfoxx.components.extension.ExpandedTopBarPreview
-import com.thebrownfoxx.components.extension.StatusBarHeight
 import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -136,20 +135,20 @@ fun ExpandedTopAppBar(
         modifier = modifier.then(appBarDragModifier),
         color = appBarContainerColor,
     ) {
-        Box {
+        Box(modifier = Modifier.statusBarsPadding()) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(
                         with(LocalDensity.current) {
-                            (maxHeightPx + StatusBarHeight.toPx() +
+                            (maxHeightPx +
                                     (scrollBehavior?.state?.heightOffset ?: 0f)).toDp()
                         }
                     ),
             ) {
                 background()
             }
-            Column(modifier = Modifier.statusBarsPadding()) {
+            Column {
                 Box(
                     modifier = Modifier
                         .height(
@@ -271,20 +270,20 @@ fun ExpandedTopAppBar(
         modifier = modifier.then(appBarDragModifier),
         color = appBarContainerColor,
     ) {
-        Box {
+        Box(modifier = Modifier.statusBarsPadding()) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(
                         with(LocalDensity.current) {
-                            (maxHeightPx + StatusBarHeight.toPx() +
+                            (maxHeightPx +
                                     (scrollBehavior?.state?.heightOffset ?: 0f)).toDp()
                         }
                     ),
             ) {
                 background()
             }
-            Column(modifier = Modifier.statusBarsPadding()) {
+            Column {
                 Box(
                     modifier = Modifier
                         .height(

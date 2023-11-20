@@ -22,9 +22,10 @@ fun SearchableLazyColumnScreen(
     topBarExpandedContent: @Composable BoxScope.() -> Unit,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
+    onNavigateUp: (() -> Unit)? = null,
     background: @Composable BoxScope.() -> Unit = {},
+    floatingActionButton: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     contentPadding: PaddingValues = PaddingValues(),
     content: LazyListScope.() -> Unit,
@@ -36,6 +37,7 @@ fun SearchableLazyColumnScreen(
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        floatingActionButton = floatingActionButton,
         bottomBar = bottomBar,
         topBar = {
             SearchTopBar(
