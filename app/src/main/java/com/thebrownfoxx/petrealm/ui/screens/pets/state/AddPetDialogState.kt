@@ -1,4 +1,4 @@
-package com.thebrownfoxx.petrealm.ui.screens.pets
+package com.thebrownfoxx.petrealm.ui.screens.pets.state
 
 import com.thebrownfoxx.petrealm.models.PetType
 

@@ -23,6 +23,13 @@ import com.thebrownfoxx.components.extension.plus
 import com.thebrownfoxx.petrealm.models.Pet
 import com.thebrownfoxx.petrealm.models.PetType
 import com.thebrownfoxx.petrealm.models.Sample
+import com.thebrownfoxx.petrealm.ui.screens.pets.components.AddPetDialog
+import com.thebrownfoxx.petrealm.ui.screens.pets.components.PetCard
+import com.thebrownfoxx.petrealm.ui.screens.pets.components.RemovePetDialog
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.AddPetDialogState
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.AddPetDialogStateChangeListener
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogState
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
 
 @Composable

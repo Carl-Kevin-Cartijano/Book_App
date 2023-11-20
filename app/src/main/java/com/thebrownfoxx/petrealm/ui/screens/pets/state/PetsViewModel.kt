@@ -1,4 +1,4 @@
-package com.thebrownfoxx.petrealm.ui.screens.pets
+package com.thebrownfoxx.petrealm.ui.screens.pets.state
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -71,6 +71,14 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         _searchQuery.update { newQuery }
     }
 
+    private fun updateVisibleAddPetDialogState(
+        block: AddPetDialogState.Visible.() -> AddPetDialogState.Visible,
+    ) {
+        _addPetDialogState.update { state ->
+            if (state is AddPetDialogState.Visible) state.block() else state
+        }
+    }
+
     fun showAddPetDialog() {
         _addPetDialogState.update { state ->
             if (state == AddPetDialogState.Hidden) AddPetDialogState.Visible() else state
@@ -78,75 +86,62 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
     }
 
     fun hideAddPetDialog() {
-        _addPetDialogState.update { AddPetDialogState.Hidden }
+        _addPetDialogState.update { state ->
+            if (state is AddPetDialogState.Visible) AddPetDialogState.Hidden else state
+        }
     }
 
     fun updatePetName(newPetName: String) {
-        _addPetDialogState.update {
-            if (it is AddPetDialogState.Visible) {
-                it.copy(
-                    petName = newPetName,
-                    hasPetNameWarning = false,
-                )
-            } else it
+        updateVisibleAddPetDialogState {
+            copy(
+                petName = newPetName,
+                hasPetNameWarning = false,
+            )
         }
     }
 
     fun updatePetAge(newPetAge: String) {
-        _addPetDialogState.update {
-            if (it is AddPetDialogState.Visible) {
-                val petAge = when (newPetAge) {
+        updateVisibleAddPetDialogState {
+            copy(
+                petAge = when (newPetAge) {
                     "" -> null
-                    else -> newPetAge.toIntOrNull() ?: it.petAge
-                }
-                it.copy(
-                    petAge = petAge,
-                    hasPetAgeWarning = false,
-                )
-            } else it
+                    else -> newPetAge.toIntOrNull() ?: this.petAge
+                },
+                hasPetAgeWarning = false,
+            )
         }
     }
 
     fun updatePetTypeDropdownExpanded(newVisible: Boolean) {
-        _addPetDialogState.update {
-            if (it is AddPetDialogState.Visible) {
-                it.copy(petTypeDropdownExpanded = newVisible)
-            } else it
-        }
+        updateVisibleAddPetDialogState { copy(petTypeDropdownExpanded = newVisible) }
     }
 
     fun updatePetType(newPetType: PetType) {
-        _addPetDialogState.update {
-            if (it is AddPetDialogState.Visible) {
-                it.copy(
-                    petType = newPetType,
-                    hasPetTypeWarning = false,
-                    petTypeDropdownExpanded = false,
-                )
-            } else it
+        updateVisibleAddPetDialogState {
+            copy(
+                petType = newPetType,
+                hasPetTypeWarning = false,
+                petTypeDropdownExpanded = false,
+            )
         }
     }
 
     fun updateHasOwner(newHasOwner: Boolean) {
-        _addPetDialogState.update {
-            if (it is AddPetDialogState.Visible) {
-                it.copy(
-                    hasOwner = newHasOwner,
-                    ownerName = if (!newHasOwner) "" else it.ownerName,
-                    hasOwnerNameWarning = if (!newHasOwner) false else it.hasOwnerNameWarning,
-                )
-            } else it
+        updateVisibleAddPetDialogState {
+            copy(
+                hasOwner = newHasOwner,
+                ownerName = if (!newHasOwner) "" else ownerName,
+                hasOwnerNameWarning = if (!newHasOwner) false else hasOwnerNameWarning,
+            )
         }
     }
 
     fun updateOwnerName(newOwnerName: String) {
-        _addPetDialogState.update {
-            if (it is AddPetDialogState.Visible) {
-                it.copy(
-                    ownerName = newOwnerName,
-                    hasOwnerNameWarning = false,
-                )
-            } else it
+        updateVisibleAddPetDialogState {
+            copy(
+                ownerName = newOwnerName,
+                hasOwnerNameWarning = false,
+            )
         }
     }
 
@@ -156,7 +151,8 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
             if (state.petName.isBlank()) state = state.copy(hasPetNameWarning = true)
             if (state.petAge == null) state = state.copy(hasPetAgeWarning = true)
             if (state.petType == null) state = state.copy(hasPetTypeWarning = true)
-            if (state.hasOwner && state.ownerName.isBlank()) state = state.copy(hasOwnerNameWarning = true)
+            if (state.hasOwner && state.ownerName.isBlank()) state =
+                state.copy(hasOwnerNameWarning = true)
 
             val newState = state
             if (!state.hasWarning) {

@@ -1,4 +1,4 @@
-package com.thebrownfoxx.petrealm.ui.screens.pets
+package com.thebrownfoxx.petrealm.ui.screens.pets.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth

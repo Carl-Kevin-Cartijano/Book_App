@@ -1,4 +1,4 @@
-package com.thebrownfoxx.petrealm.ui.screens.pets
+package com.thebrownfoxx.petrealm.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column

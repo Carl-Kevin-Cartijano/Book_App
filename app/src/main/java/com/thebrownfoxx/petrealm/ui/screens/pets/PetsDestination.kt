@@ -8,6 +8,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.thebrownfoxx.petrealm.application
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.AddPetDialogStateChangeListener
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.PetsViewModel
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogStateChangeListener
 
 @RootNavGraph(start = true)
 @Destination

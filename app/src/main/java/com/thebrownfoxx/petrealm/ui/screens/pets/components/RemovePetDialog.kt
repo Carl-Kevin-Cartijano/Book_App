@@ -1,4 +1,4 @@
-package com.thebrownfoxx.petrealm.ui.screens.pets
+package com.thebrownfoxx.petrealm.ui.screens.pets.components
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
@@ -6,6 +6,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.thebrownfoxx.components.FilledButton
 import com.thebrownfoxx.components.TextButton
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogState
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogStateChangeListener
 
 @Composable
 fun RemovePetDialog(
