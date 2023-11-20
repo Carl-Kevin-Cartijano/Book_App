@@ -4,7 +4,7 @@ object Sample {
     val Pet = Pet(
         name = "Tan",
         age = 7,
-        type = null,
+        type = PetType(name = "Cat"),
         owner = Owner(name = "Justine")
     )
 
@@ -13,7 +13,7 @@ object Sample {
         Pet(
             name = "Jericho",
             age = 69,
-            type = null,
+            type = PetType(name = "Dog"),
         )
     )
 }

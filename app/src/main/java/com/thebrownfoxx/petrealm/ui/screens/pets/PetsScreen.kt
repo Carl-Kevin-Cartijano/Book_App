@@ -1,5 +1,6 @@
 package com.thebrownfoxx.petrealm.ui.screens.pets
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -38,7 +39,8 @@ fun PetsScreen(
         topBarExpandedContent = { Text(text = "Pets") },
         searchQuery = searchQuery,
         onSearchQueryChange = onSearchQueryChange,
-        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(vertical = 16.dp),
         floatingActionButton = {
             FloatingActionButton(onClick = addPet) {
                 Icon(imageVector = Icons.TwoTone.Add, contentDescription = null)
@@ -49,6 +51,7 @@ fun PetsScreen(
             PetCard(
                 pet = pet,
                 onRemove = { removePetDialogStateChangeListener.onInitiateRemovePet(pet) },
+                contentPadding = PaddingValues(horizontal = 16.dp)
             )
         }
     }

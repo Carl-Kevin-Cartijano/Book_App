@@ -22,7 +22,10 @@ fun RemovePetDialog(
             title = { Text(text = "Remove Pet") },
             text = { Text(text = "Are you sure you want to remove ${state.pet.name}?") },
             dismissButton = {
-                TextButton(text = "No", onClick = stateChangeListener.onRemovePet)
+                TextButton(
+                    text = "No",
+                    onClick = stateChangeListener.onCancelRemovePet,
+                )
             },
             confirmButton = {
                 FilledButton(

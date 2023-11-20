@@ -1,5 +1,6 @@
 package com.thebrownfoxx.petrealm.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,6 +28,7 @@ fun SearchableLazyColumnScreen(
     background: @Composable BoxScope.() -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
+    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
     contentPadding: PaddingValues = PaddingValues(),
     content: LazyListScope.() -> Unit,
 ) {
@@ -55,6 +57,7 @@ fun SearchableLazyColumnScreen(
             content = content,
             contentPadding = scaffoldContentPadding + contentPadding,
             state = lazyListState,
+            verticalArrangement = verticalArrangement
         )
     }
 

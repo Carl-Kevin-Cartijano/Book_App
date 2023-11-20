@@ -3,7 +3,6 @@ package com.thebrownfoxx.petrealm.ui.screens.pets.state
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hamthelegend.enchantmentorder.extensions.combineToStateFlow
-import com.hamthelegend.enchantmentorder.extensions.mapToStateFlow
 import com.hamthelegend.enchantmentorder.extensions.search
 import com.thebrownfoxx.petrealm.models.Owner
 import com.thebrownfoxx.petrealm.models.Pet
@@ -18,7 +17,7 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
-    val petTypes = database.getAllPetTypes().mapToStateFlow(
+    /*val petTypes = database.getAllPetTypes().mapToStateFlow(
         scope = viewModelScope,
         initialValue = emptyList(),
     ) { realmPetTypes ->
@@ -28,7 +27,7 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
                 name = realmPetType.name,
             )
         }
-    }
+    }*/
 
     val pets = combineToStateFlow(
         database.getAllPets(),
@@ -41,12 +40,10 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
                 id = realmPet.id.toHexString(),
                 name = realmPet.name,
                 age = realmPet.age,
-                type = realmPet.type?.let { realmPetType ->
-                    PetType(
-                        id = realmPetType.id.toHexString(),
-                        name = realmPetType.name,
-                    )
-                },
+                type = PetType(
+                    id = realmPet.type!!.id.toHexString(),
+                    name = realmPet.type!!.name,
+                ),
                 owner = realmPet.owner?.let { realmOwner ->
                     Owner(
                         id = realmOwner.id.toHexString(),
@@ -58,8 +55,8 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         }.search(searchQuery) { it.name }
     }
 
-    private val _addPetDialogState = MutableStateFlow<AddPetDialogState>(AddPetDialogState.Hidden)
-    val addPetDialogState = _addPetDialogState.asStateFlow()
+    /*private val _addPetDialogState = MutableStateFlow<AddPetDialogState>(AddPetDialogState.Hidden)
+    val addPetDialogState = _addPetDialogState.asStateFlow()*/
 
     private val _removePetDialogState =
         MutableStateFlow<RemovePetDialogState>(RemovePetDialogState.Hidden)
@@ -70,7 +67,7 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         _searchQuery.update { newQuery }
     }
 
-    fun showAddPetDialog() {
+    /*fun showAddPetDialog() {
         _addPetDialogState.update { state ->
             if (state == AddPetDialogState.Hidden) AddPetDialogState.Visible() else state
         }
@@ -152,7 +149,7 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
             }
         }
         _addPetDialogState.update { state }
-    }
+    }*/
 
     fun initiateRemovePet(pet: Pet) {
         _removePetDialogState.update { RemovePetDialogState.Visible(pet) }

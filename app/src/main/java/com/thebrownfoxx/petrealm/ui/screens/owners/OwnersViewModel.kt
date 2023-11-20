@@ -22,12 +22,10 @@ class OwnersViewModel(private val database: PetRealmDatabase) : ViewModel() {
                         id = realmPet.id.toHexString(),
                         name = realmPet.name,
                         age = realmPet.age,
-                        type = realmPet.type?.let { realmPetType ->
-                            PetType(
-                                id = realmPetType.id.toHexString(),
-                                name = realmPetType.name,
-                            )
-                        },
+                        type = PetType(
+                            id = realmPet.type!!.id.toHexString(),
+                            name = realmPet.type!!.name,
+                        ),
                     )
                 }
             )
