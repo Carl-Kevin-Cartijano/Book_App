@@ -38,7 +38,6 @@ fun Pets(navigator: DestinationsNavigator) {
                 onPetAgeChange = ::updatePetAge,
                 onPetTypeDropdownExpandedChange = ::updatePetTypeDropdownExpanded,
                 onPetTypeChange = ::updatePetType,
-                onHasOwnerChange = ::updateHasOwner,
                 onOwnerNameChange = ::updateOwnerName,
                 onAddPet = ::addPet
             ),

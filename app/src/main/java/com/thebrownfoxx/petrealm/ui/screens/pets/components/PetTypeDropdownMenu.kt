@@ -2,6 +2,7 @@ package com.thebrownfoxx.petrealm.ui.screens.pets.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,7 +37,12 @@ fun PetTypeDropdownMenu(
                 readOnly = true,
                 value = selectedPetType?.name ?: "",
                 onValueChange = {},
-                label = { Text("Type") },
+                label = {
+                    Row {
+                        Text(text = "Type")
+                        Text(text = "*", color = MaterialTheme.colorScheme.error)
+                    }
+                },
                 isError = hasWarning,
                 singleLine = true,
                 colors = ExposedDropdownMenuDefaults.textFieldColors(),

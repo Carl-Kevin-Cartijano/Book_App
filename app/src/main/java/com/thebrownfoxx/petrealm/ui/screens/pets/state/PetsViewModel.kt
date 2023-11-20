@@ -126,22 +126,9 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         }
     }
 
-    fun updateHasOwner(newHasOwner: Boolean) {
-        updateVisibleAddPetDialogState {
-            copy(
-                hasOwner = newHasOwner,
-                ownerName = if (!newHasOwner) "" else ownerName,
-                hasOwnerNameWarning = if (!newHasOwner) false else hasOwnerNameWarning,
-            )
-        }
-    }
-
     fun updateOwnerName(newOwnerName: String) {
         updateVisibleAddPetDialogState {
-            copy(
-                ownerName = newOwnerName,
-                hasOwnerNameWarning = false,
-            )
+            copy(ownerName = newOwnerName)
         }
     }
 
@@ -151,8 +138,6 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
             if (state.petName.isBlank()) state = state.copy(hasPetNameWarning = true)
             if (state.petAge == null) state = state.copy(hasPetAgeWarning = true)
             if (state.petType == null) state = state.copy(hasPetTypeWarning = true)
-            if (state.hasOwner && state.ownerName.isBlank()) state =
-                state.copy(hasOwnerNameWarning = true)
 
             val newState = state
             if (!state.hasWarning) {

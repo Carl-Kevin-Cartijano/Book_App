@@ -105,7 +105,6 @@ fun PetsScreenPreview() {
                 onPetAgeChange = {},
                 onPetTypeDropdownExpandedChange = {},
                 onPetTypeChange = {},
-                onHasOwnerChange = {},
                 onOwnerNameChange = {},
                 onAddPet = {},
             ),

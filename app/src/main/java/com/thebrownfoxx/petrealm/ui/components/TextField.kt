@@ -2,6 +2,7 @@ package com.thebrownfoxx.petrealm.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
@@ -19,12 +20,20 @@ fun TextField(
     label: String? = null,
     error: String? = null,
     enabled: Boolean = true,
+    required: Boolean = false,
 ) {
     Column(modifier = modifier) {
         TextField(
             value = value,
             onValueChange = onValueChange,
-            label = label?.let { { Text(text = it) } },
+            label = label?.let {
+                {
+                    Row {
+                        Text(text = it)
+                        if (required) Text(text = "*", color = colorScheme.error)
+                    }
+                }
+            },
             enabled = enabled,
             isError = error != null,
             singleLine = true,

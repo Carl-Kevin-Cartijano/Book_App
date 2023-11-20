@@ -9,15 +9,13 @@ sealed class AddPetDialogState {
         val petAge: Int? = null,
         val petTypeDropdownExpanded: Boolean = false,
         val petType: PetType? = null,
-        val hasOwner: Boolean = false,
         val ownerName: String = "",
         val hasPetNameWarning: Boolean = false,
         val hasPetAgeWarning: Boolean = false,
         val hasPetTypeWarning: Boolean = false,
-        val hasOwnerNameWarning: Boolean = false,
     ) : AddPetDialogState() {
         val hasWarning =
-            hasPetNameWarning || hasPetAgeWarning || hasPetTypeWarning || hasOwnerNameWarning
+            hasPetNameWarning || hasPetAgeWarning || hasPetTypeWarning
     }
 }
 
@@ -28,7 +26,6 @@ class AddPetDialogStateChangeListener(
     val onPetAgeChange: (String) -> Unit,
     val onPetTypeDropdownExpandedChange: (Boolean) -> Unit,
     val onPetTypeChange: (PetType) -> Unit,
-    val onHasOwnerChange: (Boolean) -> Unit,
     val onOwnerNameChange: (String) -> Unit,
     val onAddPet: () -> Unit
 )

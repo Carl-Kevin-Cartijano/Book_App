@@ -3,13 +3,11 @@ package com.thebrownfoxx.petrealm.ui.screens.pets.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -51,7 +49,8 @@ fun AddPetDialog(
                         label = "Name",
                         value = state.petName,
                         onValueChange = stateChangeListener.onPetNameChange,
-                        error = if (state.hasPetAgeWarning) "Required" else null,
+                        required = true,
+                        error = if (state.hasPetNameWarning) "Required" else null,
                     )
                     VerticalSpacer(height = 16.dp)
                     Row {
@@ -59,6 +58,7 @@ fun AddPetDialog(
                             label = "Age",
                             value = state.petAge?.toString() ?: "",
                             onValueChange = stateChangeListener.onPetAgeChange,
+                            required = true,
                             error = if (state.hasPetAgeWarning) "Required" else null,
                             modifier = Modifier.weight(1f),
                         )
@@ -69,25 +69,15 @@ fun AddPetDialog(
                             expanded = state.petTypeDropdownExpanded,
                             onExpandedChange = stateChangeListener.onPetTypeDropdownExpandedChange,
                             onPetTypeChange = stateChangeListener.onPetTypeChange,
-                            hasWarning = state.hasPetAgeWarning,
+                            hasWarning = state.hasPetTypeWarning,
                             modifier = Modifier.weight(2f),
                         )
                     }
-                    VerticalSpacer(height = 8.dp)
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(
-                            checked = state.hasOwner,
-                            onCheckedChange = stateChangeListener.onHasOwnerChange,
-                        )
-                        Text(text = "Has owner?")
-                    }
-                    VerticalSpacer(height = 8.dp)
+                    VerticalSpacer(height = 16.dp)
                     TextField(
+                        label = "Owner name",
                         value = state.ownerName,
                         onValueChange = stateChangeListener.onOwnerNameChange,
-                        label = "Owner name",
-                        enabled = state.hasOwner,
-                        error = if (state.hasOwnerNameWarning) "Required" else null,
                     )
                 }
             },
