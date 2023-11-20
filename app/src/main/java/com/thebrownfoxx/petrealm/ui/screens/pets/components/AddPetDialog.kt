@@ -1,7 +1,5 @@
 package com.thebrownfoxx.petrealm.ui.screens.pets.components
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.AlertDialog
@@ -10,7 +8,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +21,7 @@ import com.thebrownfoxx.components.VerticalSpacer
 import com.thebrownfoxx.components.extension.rememberMutableStateOf
 import com.thebrownfoxx.petrealm.models.PetType
 import com.thebrownfoxx.petrealm.ui.components.TextField
+import com.thebrownfoxx.petrealm.ui.components.indicationlessClickable
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.AddPetDialogState
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.AddPetDialogStateChangeListener
 
@@ -39,10 +37,9 @@ fun AddPetDialog(
 
     if (state is AddPetDialogState.Visible) {
         AlertDialog(
-            modifier = modifier.clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-            ) { focusManager?.clearFocus(true) },
+            modifier = modifier.indicationlessClickable {
+                focusManager?.clearFocus(true)
+            },
             onDismissRequest = stateChangeListener.onHideAddPetDialog,
             title = { Text(text = "Add Pet") },
             text = {

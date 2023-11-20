@@ -56,7 +56,7 @@ fun PetTypeDropdownMenu(
         }
         ExposedDropdownMenu(
             expanded = expanded,
-            onDismissRequest = { onExpandedChange(false) }
+            onDismissRequest = { onExpandedChange(false) },
         ) {
             for (petType in petTypes) {
                 DropdownMenuItem(
