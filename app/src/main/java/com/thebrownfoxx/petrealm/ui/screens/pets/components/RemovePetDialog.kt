@@ -15,7 +15,7 @@ fun RemovePetDialog(
     stateChangeListener: RemovePetDialogStateChangeListener,
     modifier: Modifier = Modifier,
 ) {
-    if (state is RemovePetDialogState.Visible) {
+    if (state is RemovePetDialogState.Pending) {
         AlertDialog(
             modifier = modifier,
             onDismissRequest = stateChangeListener.onCancelRemovePet,

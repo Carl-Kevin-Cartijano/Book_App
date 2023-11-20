@@ -15,6 +15,7 @@ import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -32,17 +33,18 @@ import com.thebrownfoxx.petrealm.ui.theme.AppTheme
 @Composable
 fun PetCard(
     pet: Pet,
-    onRemove: () -> Unit,
+    onInitiateRemove: suspend () -> Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    val dismissState = rememberDismissState(
-        confirmValueChange = { dismissValue ->
-            val dismissed = dismissValue == DismissedToStart || dismissValue == DismissedToEnd
-            if (dismissed) onRemove()
-            true
+    val dismissState = rememberDismissState()
+
+    LaunchedEffect(dismissState.currentValue) {
+        if (dismissState.currentValue != Default) {
+            val removed = onInitiateRemove()
+            if (!removed) dismissState.reset()
         }
-    )
+    }
 
     val ownerLabel =
         if (pet.owner != null) "${pet.owner.name}'s ${pet.type.name.lowercase()}"
@@ -98,7 +100,7 @@ fun PetCardPreview() {
     AppTheme {
         PetCard(
             pet = Sample.Pet,
-            onRemove = {},
+            onInitiateRemove = { true },
             contentPadding = PaddingValues(16.dp),
         )
     }

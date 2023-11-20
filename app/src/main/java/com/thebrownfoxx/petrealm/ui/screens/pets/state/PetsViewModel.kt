@@ -8,10 +8,12 @@ import com.thebrownfoxx.petrealm.models.Owner
 import com.thebrownfoxx.petrealm.models.Pet
 import com.thebrownfoxx.petrealm.models.PetType
 import com.thebrownfoxx.petrealm.realm.PetRealmDatabase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
@@ -151,21 +153,32 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         _addPetDialogState.update { state }
     }*/
 
-    fun initiateRemovePet(pet: Pet) {
-        _removePetDialogState.update { RemovePetDialogState.Visible(pet) }
+    suspend fun initiateRemovePet(pet: Pet): Boolean {
+        _removePetDialogState.update { RemovePetDialogState.Pending(pet) }
+        return withContext(Dispatchers.Default) {
+            var state: RemovePetDialogState
+            while (true) {
+                state = removePetDialogState.value
+                if (state == RemovePetDialogState.Canceled || state == RemovePetDialogState.Confirmed){
+                    _removePetDialogState.update { RemovePetDialogState.Hidden }
+                    break
+                }
+            }
+            return@withContext state == RemovePetDialogState.Confirmed
+        }
     }
 
     fun cancelRemovePet() {
-        _removePetDialogState.update { RemovePetDialogState.Hidden }
+        _removePetDialogState.update { RemovePetDialogState.Canceled }
     }
 
     fun removePet() {
         val state = removePetDialogState.value
-        if (state is RemovePetDialogState.Visible) {
+        if (state is RemovePetDialogState.Pending) {
             viewModelScope.launch {
                 database.deletePet(id = org.mongodb.kbson.ObjectId(state.pet.id))
             }
         }
-        _removePetDialogState.update { RemovePetDialogState.Hidden }
+        _removePetDialogState.update { RemovePetDialogState.Confirmed }
     }
 }

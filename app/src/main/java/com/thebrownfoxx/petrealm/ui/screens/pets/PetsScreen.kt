@@ -50,7 +50,7 @@ fun PetsScreen(
         items(pets) { pet ->
             PetCard(
                 pet = pet,
-                onRemove = { removePetDialogStateChangeListener.onInitiateRemovePet(pet) },
+                onInitiateRemove = { removePetDialogStateChangeListener.onInitiateRemovePet(pet) },
                 contentPadding = PaddingValues(horizontal = 16.dp)
             )
         }
@@ -84,7 +84,7 @@ fun PetsScreenPreview() {
 //            ),
             removePetDialogState = RemovePetDialogState.Hidden,
             removePetDialogStateChangeListener = RemovePetDialogStateChangeListener(
-                onInitiateRemovePet = {},
+                onInitiateRemovePet = { true },
                 onCancelRemovePet = {},
                 onRemovePet = {},
             )
