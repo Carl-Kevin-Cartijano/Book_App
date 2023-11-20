@@ -7,7 +7,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.thebrownfoxx.petrealm.application
+import com.thebrownfoxx.petrealm.ui.screens.navhost.PetNavGraph
 
+@PetNavGraph
 @Destination
 @Composable
 fun AddPet(navigator: DestinationsNavigator) {

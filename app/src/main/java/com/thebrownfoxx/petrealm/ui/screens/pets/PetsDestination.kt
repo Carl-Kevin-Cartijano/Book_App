@@ -5,14 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.thebrownfoxx.petrealm.application
 import com.thebrownfoxx.petrealm.ui.screens.destinations.AddPetDestination
+import com.thebrownfoxx.petrealm.ui.screens.navhost.PetNavGraph
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.PetsViewModel
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogStateChangeListener
 
-@RootNavGraph(start = true)
+@PetNavGraph(start = true)
 @Destination
 @Composable
 fun Pets(navigator: DestinationsNavigator) {

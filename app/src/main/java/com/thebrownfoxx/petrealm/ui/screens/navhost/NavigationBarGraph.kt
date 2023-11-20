@@ -4,22 +4,21 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Person
 import androidx.compose.material.icons.twotone.Pets
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
-import com.thebrownfoxx.petrealm.ui.screens.destinations.OwnersDestination
-import com.thebrownfoxx.petrealm.ui.screens.destinations.PetsDestination
+import com.thebrownfoxx.petrealm.ui.screens.NavGraph
+import com.thebrownfoxx.petrealm.ui.screens.NavGraphs
 
-enum class NavigationBarDestination(
-    val direction: DirectionDestinationSpec,
+enum class NavigationBarGraph(
+    val graph: NavGraph,
     val icon: ImageVector,
     val label: String,
 ) {
-    Pets(
-        direction = PetsDestination,
+    Pet(
+        graph = NavGraphs.pet,
         icon = Icons.TwoTone.Pets,
         label = "Pets",
     ),
-    Owners(
-        direction = OwnersDestination,
+    Owner(
+        graph = NavGraphs.owner,
         icon = Icons.TwoTone.Person,
         label = "Owners",
     )
