@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -16,6 +17,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.thebrownfoxx.components.extension.plus
 
+fun <T> List<T>?.getListState(emptyText: String) = when {
+    this == null -> ListState.Loading
+    isEmpty() -> ListState.Empty(text = emptyText)
+    else -> ListState.Loaded
+}
+
+sealed class ListState {
+    data object Loading : ListState()
+    data class Empty(val text: String) : ListState()
+    data object Loaded : ListState()
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchableLazyColumnScreen(
@@ -23,6 +36,7 @@ fun SearchableLazyColumnScreen(
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    listState: ListState = ListState.Loaded,
     onNavigateUp: (() -> Unit)? = null,
     background: @Composable BoxScope.() -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
@@ -50,13 +64,22 @@ fun SearchableLazyColumnScreen(
             )
         },
     ) { scaffoldContentPadding ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            content = content,
-            contentPadding = scaffoldContentPadding + contentPadding,
-            state = lazyListState,
-            verticalArrangement = verticalArrangement
-        )
+        when (listState) {
+            ListState.Loading -> LoadingIndicator(
+                modifier = Modifier.padding(scaffoldContentPadding),
+            )
+            is ListState.Empty -> EmptyList(
+                text = listState.text,
+                modifier = Modifier.padding(scaffoldContentPadding),
+            )
+            else -> LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                content = content,
+                contentPadding = scaffoldContentPadding + contentPadding,
+                state = lazyListState,
+                verticalArrangement = verticalArrangement,
+            )
+        }
     }
 
     LaunchedEffect(searchQuery) {

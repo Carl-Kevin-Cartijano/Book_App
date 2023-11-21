@@ -18,6 +18,7 @@ import com.thebrownfoxx.petrealm.models.Sample
 import com.thebrownfoxx.petrealm.ui.components.RemoveDialogState
 import com.thebrownfoxx.petrealm.ui.components.RemoveDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.components.SearchableLazyColumnScreen
+import com.thebrownfoxx.petrealm.ui.components.getListState
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.AdoptDialog
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.RemovePetDialog
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.SwipeablePetCard
@@ -28,7 +29,7 @@ import com.thebrownfoxx.petrealm.ui.theme.AppTheme
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PetsScreen(
-    pets: List<Pet>,
+    pets: List<Pet>?,
     selectedPet: Pet?,
     onSelectedPetChange: (Pet?) -> Unit,
     searchQuery: String,
@@ -50,6 +51,7 @@ fun PetsScreen(
         onSearchQueryChange = onSearchQueryChange,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(vertical = 16.dp),
+        listState = pets.getListState("No pets registered"),
         floatingActionButton = {
             FloatingActionButton(onClick = addPet) {
                 Icon(imageVector = Icons.TwoTone.Add, contentDescription = null)
@@ -57,7 +59,7 @@ fun PetsScreen(
         }
     ) {
         items(
-            items = pets,
+            items = pets ?: emptyList(),
             key = { it.id }
         ) { pet ->
             val selected = pet == selectedPet

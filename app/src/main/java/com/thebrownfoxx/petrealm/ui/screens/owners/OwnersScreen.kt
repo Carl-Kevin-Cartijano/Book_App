@@ -15,13 +15,14 @@ import com.thebrownfoxx.petrealm.models.Sample
 import com.thebrownfoxx.petrealm.ui.components.RemoveDialogState
 import com.thebrownfoxx.petrealm.ui.components.RemoveDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.components.SearchableLazyColumnScreen
+import com.thebrownfoxx.petrealm.ui.components.getListState
 import com.thebrownfoxx.petrealm.ui.screens.owners.components.SwipeableOwnerCard
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OwnersScreen(
-    owners: List<Owner>,
+    owners: List<Owner>?,
     selectedOwner: Owner?,
     onSelectedOwnerChange: (Owner?) -> Unit,
     searchQuery: String,
@@ -37,9 +38,10 @@ fun OwnersScreen(
         onSearchQueryChange = onSearchQueryChange,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(vertical = 16.dp),
+        listState = owners.getListState("No owners registered"),
     ) {
         items(
-            items = owners,
+            items = owners ?: emptyList(),
             key = { it.id }
         ) { owner ->
             val selected = owner == selectedOwner

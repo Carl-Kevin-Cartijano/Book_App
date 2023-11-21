@@ -36,7 +36,7 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         database.getAllPets(),
         searchQuery,
         scope = viewModelScope,
-        initialValue = emptyList(),
+        initialValue = null,
     ) { realmPets, searchQuery ->
         realmPets.map { realmPet ->
             Pet(

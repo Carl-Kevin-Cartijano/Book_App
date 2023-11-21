@@ -24,7 +24,7 @@ class OwnersViewModel(private val database: PetRealmDatabase) : ViewModel() {
         database.getAllOwners(),
         searchQuery,
         scope = viewModelScope,
-        initialValue = emptyList(),
+        initialValue = null,
     ) { realmOwners, searchQuery ->
         realmOwners.map { realmOwner ->
             Owner(
