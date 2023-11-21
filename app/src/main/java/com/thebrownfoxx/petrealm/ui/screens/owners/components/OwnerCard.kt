@@ -50,9 +50,9 @@ fun OwnerCard(
                 text = owner.name,
                 style = typography.titleMedium,
             )
-            AnimatedVisibility(visible = !expanded) {
+            AnimatedVisibility(visible = !expanded || owner.pets.isEmpty()) {
                 Text(
-                    text = "${owner.pets.size} pets",
+                    text = "${owner.pets.size} ${if (owner.pets.size == 1) "pet" else "pets"}",
                     style = typography.bodyMedium,
                 )
             }
