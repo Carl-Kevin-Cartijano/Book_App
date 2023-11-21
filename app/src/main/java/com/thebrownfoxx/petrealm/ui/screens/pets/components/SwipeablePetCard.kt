@@ -2,7 +2,7 @@ package com.thebrownfoxx.petrealm.ui.screens.pets.components
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DismissValue.*
+import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.rememberDismissState
@@ -27,7 +27,7 @@ fun SwipeablePetCard(
     val dismissState = rememberDismissState()
 
     LaunchedEffect(dismissState.currentValue) {
-        if (dismissState.currentValue != Default) {
+        if (dismissState.currentValue != DismissValue.Default) {
             val removed = onInitiateRemove()
             if (!removed) dismissState.reset()
         }
