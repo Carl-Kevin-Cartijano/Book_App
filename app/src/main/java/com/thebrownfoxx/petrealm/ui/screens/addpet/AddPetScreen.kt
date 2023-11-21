@@ -3,8 +3,11 @@ package com.thebrownfoxx.petrealm.ui.screens.addpet
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -54,7 +57,7 @@ fun AddPetScreen(
 ) {
     val (first, second, third, fourth, fifth) = remember { FocusRequester.createRefs() }
     val focusManger = LocalFocusManager.current
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
         modifier = Modifier
@@ -82,7 +85,7 @@ fun AddPetScreen(
             }
         },
     ) { contentPadding ->
-        val padding = contentPadding + PaddingValues(16.dp)
+        val padding = contentPadding + PaddingValues(16.dp) + WindowInsets.ime.asPaddingValues()
         
         Column(
             modifier = modifier

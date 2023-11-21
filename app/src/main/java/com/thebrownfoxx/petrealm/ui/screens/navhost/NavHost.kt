@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.Scaffold
@@ -30,13 +29,13 @@ fun NavHost(modifier: Modifier = Modifier) {
     var navigationBarGraph by rememberSaveable { mutableStateOf(NavigationBarGraph.Pet) }
 
     Scaffold(
+        modifier = modifier,
         bottomBar = {
             NavigationBar(
                 currentNavGraph = navigationBarGraph,
                 onNavGraphChange = { navigationBarGraph = it },
             )
         },
-        modifier = modifier.imePadding(),
     ) { contentPadding ->
         AnimatedContent(targetState = navigationBarGraph, label = "") { graph ->
             DestinationsNavHost(
