@@ -20,18 +20,6 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
-    /*val petTypes = database.getAllPetTypes().mapToStateFlow(
-        scope = viewModelScope,
-        initialValue = emptyList(),
-    ) { realmPetTypes ->
-        realmPetTypes.map { realmPetType ->
-            PetType(
-                id = realmPetType.id.toHexString(),
-                name = realmPetType.name,
-            )
-        }
-    }*/
-
     val pets = combineToStateFlow(
         database.getAllPets(),
         searchQuery,
@@ -61,9 +49,6 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
     private val _selectedPet = MutableStateFlow<Pet?>(null)
     val selectedPet = _selectedPet.asStateFlow()
 
-    /*private val _addPetDialogState = MutableStateFlow<AddPetDialogState>(AddPetDialogState.Hidden)
-    val addPetDialogState = _addPetDialogState.asStateFlow()*/
-
     private val _adoptDialogState =
         MutableStateFlow<AdoptDialogState>(AdoptDialogState.Hidden)
     val adoptDialogState = _adoptDialogState.asStateFlow()
@@ -79,90 +64,6 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
     fun updateSelectedPet(pet: Pet?) {
         _selectedPet.update { pet }
     }
-
-    /*fun showAddPetDialog() {
-        _addPetDialogState.update { state ->
-            if (state == AddPetDialogState.Hidden) AddPetDialogState.Visible() else state
-        }
-    }
-
-    fun hideAddPetDialog() {
-        _addPetDialogState.update { state ->
-            if (state is AddPetDialogState.Visible) AddPetDialogState.Hidden else state
-        }
-    }
-
-    private fun updateVisibleAddPetDialogState(
-        block: AddPetDialogState.Visible.() -> AddPetDialogState.Visible,
-    ) {
-        _addPetDialogState.update { state ->
-            if (state is AddPetDialogState.Visible) state.block() else state
-        }
-    }
-
-    fun updatePetName(newPetName: String) {
-        updateVisibleAddPetDialogState {
-            copy(
-                petName = newPetName,
-                hasPetNameWarning = false,
-            )
-        }
-    }
-
-    fun updatePetAge(newPetAge: String) {
-        updateVisibleAddPetDialogState {
-            copy(
-                petAge = when (newPetAge) {
-                    "" -> null
-                    else -> newPetAge.toIntOrNull() ?: this.petAge
-                },
-                hasPetAgeWarning = false,
-            )
-        }
-    }
-
-    fun updatePetTypeDropdownExpanded(newVisible: Boolean) {
-        updateVisibleAddPetDialogState { copy(petTypeDropdownExpanded = newVisible) }
-    }
-
-    fun updatePetType(newPetType: PetType) {
-        updateVisibleAddPetDialogState {
-            copy(
-                petType = newPetType,
-                hasPetTypeWarning = false,
-                petTypeDropdownExpanded = false,
-            )
-        }
-    }
-
-    fun updateOwnerName(newOwnerName: String) {
-        updateVisibleAddPetDialogState {
-            copy(ownerName = newOwnerName)
-        }
-    }
-
-    fun addPet() {
-        var state = addPetDialogState.value
-        if (state is AddPetDialogState.Visible) {
-            if (state.petName.isBlank()) state = state.copy(hasPetNameWarning = true)
-            if (state.petAge == null) state = state.copy(hasPetAgeWarning = true)
-            if (state.petType == null) state = state.copy(hasPetTypeWarning = true)
-
-            val newState = state
-            if (!state.hasWarning) {
-                viewModelScope.launch {
-                    database.addPet(
-                        name = newState.petName,
-                        age = newState.petAge!!,
-                        typeId = org.mongodb.kbson.ObjectId(newState.petType!!.id),
-                        ownerName = newState.ownerName,
-                    )
-                }
-                state = AddPetDialogState.Hidden
-            }
-        }
-        _addPetDialogState.update { state }
-    }*/
 
     fun initiateAdopt(pet: Pet) {
         _adoptDialogState.update { AdoptDialogState.Pending(pet) }
