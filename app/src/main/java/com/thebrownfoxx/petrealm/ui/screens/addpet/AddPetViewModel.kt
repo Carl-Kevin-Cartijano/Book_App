@@ -70,7 +70,7 @@ class AddPetViewModel(private val database: PetRealmDatabase) : ViewModel() {
     }
 
     fun addPet() {
-        var state = _state.value
+        var state = state.value
         if (state.petName.isBlank()) state = state.copy(hasPetNameWarning = true)
         if (state.petAge == null) state = state.copy(hasPetAgeWarning = true)
         if (state.petType == null) state = state.copy(hasPetTypeWarning = true)
