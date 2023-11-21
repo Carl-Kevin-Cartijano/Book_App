@@ -50,7 +50,7 @@ fun AddPetScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             ExpandedTopAppBar(
-                collapsedContent = { Text(text = "Register Pet") },
+                collapsedContent = { Text(text = "Register pet") },
                 navigationIcon = {
                     IconButton(
                         imageVector = Icons.TwoTone.ArrowBack,

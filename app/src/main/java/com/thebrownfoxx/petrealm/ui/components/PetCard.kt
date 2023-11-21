@@ -115,7 +115,7 @@ fun PetCard(
                 .fillMaxWidth(),
         )
         AnimatedVisibility(visible = expanded) {
-            Surface(tonalElevation = Elevation.level(1)) {
+            Surface(tonalElevation = Elevation.level(2)) {
                 Row(
                     modifier = Modifier
                         .padding(16.dp)
