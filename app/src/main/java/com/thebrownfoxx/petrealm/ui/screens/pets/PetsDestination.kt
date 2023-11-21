@@ -7,10 +7,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.thebrownfoxx.petrealm.application
+import com.thebrownfoxx.petrealm.ui.components.RemoveDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.screens.destinations.AddPetDestination
 import com.thebrownfoxx.petrealm.ui.screens.navhost.PetNavGraph
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.PetsViewModel
-import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogStateChangeListener
 
 @PetNavGraph(start = true)
 @Destination
@@ -23,7 +23,7 @@ fun Pets(navigator: DestinationsNavigator) {
         val searchQuery by searchQuery.collectAsStateWithLifecycle()
         /*val petTypes by petTypes.collectAsStateWithLifecycle()
         val addPetDialogState by addPetDialogState.collectAsStateWithLifecycle()*/
-        val removePetDialogState by removePetDialogState.collectAsStateWithLifecycle()
+        val removeDialogState by removeDialogState.collectAsStateWithLifecycle()
 
         PetsScreen(
             pets = pets,
@@ -42,11 +42,11 @@ fun Pets(navigator: DestinationsNavigator) {
                 onOwnerNameChange = ::updateOwnerName,
                 onAddPet = ::addPet
             ),*/
-            removePetDialogState = removePetDialogState,
-            removePetDialogStateChangeListener = RemovePetDialogStateChangeListener(
-                onInitiateRemovePet = ::initiateRemovePet,
-                onCancelRemovePet = ::cancelRemovePet,
-                onRemovePet = ::removePet
+            removeDialogState = removeDialogState,
+            removeDialogStateChangeListener = RemoveDialogStateChangeListener(
+                onInitiateRemove = ::initiateRemove,
+                onCancelRemove = ::cancelRemove,
+                onRemove = ::remove
             )
         )
     }

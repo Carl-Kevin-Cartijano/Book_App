@@ -6,31 +6,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.thebrownfoxx.components.FilledButton
 import com.thebrownfoxx.components.TextButton
-import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogState
-import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogStateChangeListener
+import com.thebrownfoxx.petrealm.models.Pet
+import com.thebrownfoxx.petrealm.ui.components.RemoveDialogState
+import com.thebrownfoxx.petrealm.ui.components.RemoveDialogStateChangeListener
 
 @Composable
 fun RemovePetDialog(
-    state: RemovePetDialogState,
-    stateChangeListener: RemovePetDialogStateChangeListener,
+    state: RemoveDialogState<Pet>,
+    stateChangeListener: RemoveDialogStateChangeListener<Pet>,
     modifier: Modifier = Modifier,
 ) {
-    if (state is RemovePetDialogState.Pending) {
+    if (state is RemoveDialogState.Pending) {
         AlertDialog(
             modifier = modifier,
-            onDismissRequest = stateChangeListener.onCancelRemovePet,
+            onDismissRequest = stateChangeListener.onCancelRemove,
             title = { Text(text = "Remove Pet") },
-            text = { Text(text = "Are you sure you want to remove ${state.pet.name}?") },
+            text = { Text(text = "Are you sure you want to remove ${state.value.name}?") },
             dismissButton = {
                 TextButton(
                     text = "No",
-                    onClick = stateChangeListener.onCancelRemovePet,
+                    onClick = stateChangeListener.onCancelRemove,
                 )
             },
             confirmButton = {
                 FilledButton(
                     text = "Yes",
-                    onClick = stateChangeListener.onRemovePet,
+                    onClick = stateChangeListener.onRemove,
                 )
             },
         )

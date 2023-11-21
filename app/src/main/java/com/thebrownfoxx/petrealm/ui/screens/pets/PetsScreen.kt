@@ -15,11 +15,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thebrownfoxx.petrealm.models.Pet
 import com.thebrownfoxx.petrealm.models.Sample
+import com.thebrownfoxx.petrealm.ui.components.RemoveDialogState
+import com.thebrownfoxx.petrealm.ui.components.RemoveDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.components.SearchableLazyColumnScreen
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.RemovePetDialog
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.SwipeablePetCard
-import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogState
-import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -32,8 +32,8 @@ fun PetsScreen(
 //    petTypes: List<PetType>,
 //    addPetDialogState: AddPetDialogState,
 //    addPetDialogStateChangeListener: AddPetDialogStateChangeListener,
-    removePetDialogState: RemovePetDialogState,
-    removePetDialogStateChangeListener: RemovePetDialogStateChangeListener,
+    removeDialogState: RemoveDialogState<Pet>,
+    removeDialogStateChangeListener: RemoveDialogStateChangeListener<Pet>,
     modifier: Modifier = Modifier,
 ) {
     SearchableLazyColumnScreen(
@@ -55,15 +55,15 @@ fun PetsScreen(
         ) { pet ->
             SwipeablePetCard(
                 pet = pet,
-                onInitiateRemove = { removePetDialogStateChangeListener.onInitiateRemovePet(pet) },
+                onInitiateRemove = { removeDialogStateChangeListener.onInitiateRemove(pet) },
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = Modifier.animateItemPlacement(),
             )
         }
     }
     RemovePetDialog(
-        state = removePetDialogState,
-        stateChangeListener = removePetDialogStateChangeListener,
+        state = removeDialogState,
+        stateChangeListener = removeDialogStateChangeListener,
     )
 }
 
@@ -88,11 +88,11 @@ fun PetsScreenPreview() {
 //                onOwnerNameChange = {},
 //                onAddPet = {},
 //            ),
-            removePetDialogState = RemovePetDialogState.Hidden,
-            removePetDialogStateChangeListener = RemovePetDialogStateChangeListener(
-                onInitiateRemovePet = { true },
-                onCancelRemovePet = {},
-                onRemovePet = {},
+            removeDialogState = RemoveDialogState.Hidden(),
+            removeDialogStateChangeListener = RemoveDialogStateChangeListener(
+                onInitiateRemove = { true },
+                onCancelRemove = {},
+                onRemove = {},
             )
         )
     }

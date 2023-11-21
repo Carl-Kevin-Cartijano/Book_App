@@ -8,6 +8,7 @@ import com.thebrownfoxx.petrealm.models.Owner
 import com.thebrownfoxx.petrealm.models.Pet
 import com.thebrownfoxx.petrealm.models.PetType
 import com.thebrownfoxx.petrealm.realm.PetRealmDatabase
+import com.thebrownfoxx.petrealm.ui.components.RemoveDialogState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -60,9 +61,9 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
     /*private val _addPetDialogState = MutableStateFlow<AddPetDialogState>(AddPetDialogState.Hidden)
     val addPetDialogState = _addPetDialogState.asStateFlow()*/
 
-    private val _removePetDialogState =
-        MutableStateFlow<RemovePetDialogState>(RemovePetDialogState.Hidden)
-    val removePetDialogState = _removePetDialogState.asStateFlow()
+    private val _removeDialogState =
+        MutableStateFlow<RemoveDialogState<Pet>>(RemoveDialogState.Hidden())
+    val removeDialogState = _removeDialogState.asStateFlow()
 
 
     fun updateSearchQuery(newQuery: String) {
@@ -153,32 +154,32 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         _addPetDialogState.update { state }
     }*/
 
-    suspend fun initiateRemovePet(pet: Pet): Boolean {
-        _removePetDialogState.update { RemovePetDialogState.Pending(pet) }
+    suspend fun initiateRemove(pet: Pet): Boolean {
+        _removeDialogState.update { RemoveDialogState.Pending(pet) }
         return withContext(Dispatchers.Default) {
-            var state: RemovePetDialogState
+            var state: RemoveDialogState<Pet>
             while (true) {
-                state = removePetDialogState.value
-                if (state == RemovePetDialogState.Canceled || state == RemovePetDialogState.Confirmed){
-                    _removePetDialogState.update { RemovePetDialogState.Hidden }
+                state = removeDialogState.value
+                if (state is RemoveDialogState.Canceled || state is RemoveDialogState.Confirmed){
+                    _removeDialogState.update { RemoveDialogState.Hidden() }
                     break
                 }
             }
-            return@withContext state == RemovePetDialogState.Confirmed
+            return@withContext state is RemoveDialogState.Confirmed
         }
     }
 
-    fun cancelRemovePet() {
-        _removePetDialogState.update { RemovePetDialogState.Canceled }
+    fun cancelRemove() {
+        _removeDialogState.update { RemoveDialogState.Canceled() }
     }
 
-    fun removePet() {
-        val state = removePetDialogState.value
-        if (state is RemovePetDialogState.Pending) {
+    fun remove() {
+        val state = removeDialogState.value
+        if (state is RemoveDialogState.Pending) {
             viewModelScope.launch {
-                database.deletePet(id = org.mongodb.kbson.ObjectId(state.pet.id))
+                database.deletePet(id = org.mongodb.kbson.ObjectId(state.value.id))
             }
         }
-        _removePetDialogState.update { RemovePetDialogState.Confirmed }
+        _removeDialogState.update { RemoveDialogState.Confirmed() }
     }
 }
