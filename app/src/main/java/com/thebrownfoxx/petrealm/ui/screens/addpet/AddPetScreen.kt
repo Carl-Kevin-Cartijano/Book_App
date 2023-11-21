@@ -17,6 +17,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thebrownfoxx.components.ExpandedTopAppBar
@@ -32,6 +33,7 @@ import com.thebrownfoxx.components.extension.top
 import com.thebrownfoxx.petrealm.models.PetType
 import com.thebrownfoxx.petrealm.ui.components.PetCard
 import com.thebrownfoxx.petrealm.ui.components.TextField
+import com.thebrownfoxx.petrealm.ui.components.indicationlessClickable
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.PetTypeDropdownMenu
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
 
@@ -44,10 +46,13 @@ fun AddPetScreen(
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val focusManger = LocalFocusManager.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .indicationlessClickable { focusManger.clearFocus() },
         topBar = {
             ExpandedTopAppBar(
                 collapsedContent = { Text(text = "Register pet") },
@@ -94,6 +99,7 @@ fun AddPetScreen(
                     onValueChange = stateChangeListener.onPetAgeChange,
                     required = true,
                     error = if (state.hasPetAgeWarning) "Required" else null,
+                    numeric = true,
                     modifier = Modifier.weight(1f),
                 )
                 HorizontalSpacer(width = 16.dp)

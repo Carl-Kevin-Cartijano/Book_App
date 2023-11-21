@@ -5,12 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -22,6 +24,7 @@ fun TextField(
     error: String? = null,
     enabled: Boolean = true,
     required: Boolean = false,
+    numeric: Boolean = false,
 ) {
     Column(modifier = modifier) {
         TextField(
@@ -39,6 +42,10 @@ fun TextField(
             isError = error != null,
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions.Default.run {
+                if (numeric) copy(keyboardType = KeyboardType.Number)
+                else this
+            }
         )
         AnimatedVisibility(visible = error != null) {
             Text(
