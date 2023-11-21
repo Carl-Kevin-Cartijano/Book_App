@@ -62,6 +62,34 @@ class PetRealmDatabase {
         }
     }
 
+    suspend fun adoptPet(
+        petId: ObjectId,
+        ownerName: String,
+    ) {
+        withContext(Dispatchers.IO) {
+            realm.write {
+                val pet = realm.query<RealmPet>("id == $0", petId).first().find()
+                val managedPet = findLatest(pet!!)!!
+                if (ownerName.isNotEmpty()) {
+                    val ownerResult: RealmOwner? =
+                        realm.query<RealmOwner>("name == $0", ownerName).first().find()
+                    if (ownerResult == null) {
+                        val owner = RealmOwner().apply {
+                            this.name = ownerName
+                            this.pets.add(managedPet)
+                        }
+                        val managedOwner = copyToRealm(owner)
+                        managedPet.owner = managedOwner
+                    } else {
+                        val managedOwner = findLatest(ownerResult)
+                        managedOwner?.pets?.add(managedPet)
+                        findLatest(managedPet)?.owner = managedOwner
+                    }
+                }
+            }
+        }
+    }
+
     suspend fun deletePet(id: ObjectId) {
         withContext(Dispatchers.IO) {
             realm.write {

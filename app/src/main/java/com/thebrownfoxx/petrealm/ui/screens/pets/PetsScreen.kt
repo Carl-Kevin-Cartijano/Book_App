@@ -18,20 +18,27 @@ import com.thebrownfoxx.petrealm.models.Sample
 import com.thebrownfoxx.petrealm.ui.components.RemoveDialogState
 import com.thebrownfoxx.petrealm.ui.components.RemoveDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.components.SearchableLazyColumnScreen
+import com.thebrownfoxx.petrealm.ui.screens.pets.components.AdoptDialog
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.RemovePetDialog
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.SwipeablePetCard
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.AdoptDialogState
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.AdoptDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PetsScreen(
     pets: List<Pet>,
+    selectedPet: Pet?,
+    onSelectedPetChange: (Pet?) -> Unit,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
     addPet: () -> Unit,
 //    petTypes: List<PetType>,
 //    addPetDialogState: AddPetDialogState,
 //    addPetDialogStateChangeListener: AddPetDialogStateChangeListener,
+    adoptDialogState: AdoptDialogState,
+    adoptDialogStateChangeListener: AdoptDialogStateChangeListener,
     removeDialogState: RemoveDialogState<Pet>,
     removeDialogStateChangeListener: RemoveDialogStateChangeListener<Pet>,
     modifier: Modifier = Modifier,
@@ -53,14 +60,25 @@ fun PetsScreen(
             items = pets,
             key = { it.id }
         ) { pet ->
+            val selected = pet == selectedPet
+
             SwipeablePetCard(
                 pet = pet,
+                expanded = selected,
+                onClick = {
+                    if (!selected) onSelectedPetChange(pet) else onSelectedPetChange(null)
+                },
+                onInitiateAdopt = { adoptDialogStateChangeListener.onInitiateAdopt(pet) },
                 onInitiateRemove = { removeDialogStateChangeListener.onInitiateRemove(pet) },
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = Modifier.animateItemPlacement(),
             )
         }
     }
+    AdoptDialog(
+        state = adoptDialogState,
+        stateChangeListener = adoptDialogStateChangeListener,
+    )
     RemovePetDialog(
         state = removeDialogState,
         stateChangeListener = removeDialogStateChangeListener,
@@ -73,6 +91,8 @@ fun PetsScreenPreview() {
     AppTheme {
         PetsScreen(
             pets = Sample.Pets,
+            selectedPet = null,
+            onSelectedPetChange = {},
             searchQuery = "",
             onSearchQueryChange = {},
             addPet = {},
@@ -88,6 +108,13 @@ fun PetsScreenPreview() {
 //                onOwnerNameChange = {},
 //                onAddPet = {},
 //            ),
+            adoptDialogState = AdoptDialogState.Hidden,
+            adoptDialogStateChangeListener = AdoptDialogStateChangeListener(
+                onInitiateAdopt = {},
+                onCancelAdopt = {},
+                onOwnerNameChange = {},
+                onAdopt = {},
+            ),
             removeDialogState = RemoveDialogState.Hidden(),
             removeDialogStateChangeListener = RemoveDialogStateChangeListener(
                 onInitiateRemove = { true },

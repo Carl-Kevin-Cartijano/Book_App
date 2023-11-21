@@ -10,6 +10,7 @@ import com.thebrownfoxx.petrealm.application
 import com.thebrownfoxx.petrealm.ui.components.RemoveDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.screens.destinations.AddPetDestination
 import com.thebrownfoxx.petrealm.ui.screens.navhost.PetNavGraph
+import com.thebrownfoxx.petrealm.ui.screens.pets.state.AdoptDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.PetsViewModel
 
 @PetNavGraph(start = true)
@@ -20,13 +21,17 @@ fun Pets(navigator: DestinationsNavigator) {
 
     with(viewModel) {
         val pets by pets.collectAsStateWithLifecycle()
+        val selectedPet by selectedPet.collectAsStateWithLifecycle()
         val searchQuery by searchQuery.collectAsStateWithLifecycle()
         /*val petTypes by petTypes.collectAsStateWithLifecycle()
         val addPetDialogState by addPetDialogState.collectAsStateWithLifecycle()*/
+        val adoptDialogState by adoptDialogState.collectAsStateWithLifecycle()
         val removeDialogState by removeDialogState.collectAsStateWithLifecycle()
 
         PetsScreen(
             pets = pets,
+            selectedPet = selectedPet,
+            onSelectedPetChange = ::updateSelectedPet,
             searchQuery = searchQuery,
             onSearchQueryChange = ::updateSearchQuery,
             addPet = { navigator.navigate(AddPetDestination) },
@@ -42,6 +47,13 @@ fun Pets(navigator: DestinationsNavigator) {
                 onOwnerNameChange = ::updateOwnerName,
                 onAddPet = ::addPet
             ),*/
+            adoptDialogState = adoptDialogState,
+            adoptDialogStateChangeListener = AdoptDialogStateChangeListener(
+                onInitiateAdopt = ::initiateAdopt,
+                onOwnerNameChange = ::updateOwnerName,
+                onCancelAdopt = ::cancelAdopt,
+                onAdopt = ::adopt,
+            ),
             removeDialogState = removeDialogState,
             removeDialogStateChangeListener = RemoveDialogStateChangeListener(
                 onInitiateRemove = ::initiateRemove,

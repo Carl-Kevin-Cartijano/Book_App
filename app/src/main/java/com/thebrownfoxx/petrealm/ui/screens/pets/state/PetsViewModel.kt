@@ -58,16 +58,26 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         }.search(searchQuery) { it.name }
     }
 
+    private val _selectedPet = MutableStateFlow<Pet?>(null)
+    val selectedPet = _selectedPet.asStateFlow()
+
     /*private val _addPetDialogState = MutableStateFlow<AddPetDialogState>(AddPetDialogState.Hidden)
     val addPetDialogState = _addPetDialogState.asStateFlow()*/
+
+    private val _adoptDialogState =
+        MutableStateFlow<AdoptDialogState>(AdoptDialogState.Hidden)
+    val adoptDialogState = _adoptDialogState.asStateFlow()
 
     private val _removeDialogState =
         MutableStateFlow<RemoveDialogState<Pet>>(RemoveDialogState.Hidden())
     val removeDialogState = _removeDialogState.asStateFlow()
 
-
     fun updateSearchQuery(newQuery: String) {
         _searchQuery.update { newQuery }
+    }
+
+    fun updateSelectedPet(pet: Pet?) {
+        _selectedPet.update { pet }
     }
 
     /*fun showAddPetDialog() {
@@ -153,6 +163,44 @@ class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
         }
         _addPetDialogState.update { state }
     }*/
+
+    fun initiateAdopt(pet: Pet) {
+        _adoptDialogState.update { AdoptDialogState.Pending(pet) }
+    }
+
+    fun updateOwnerName(newOwnerName: String) {
+        _adoptDialogState.update {
+            if (it is AdoptDialogState.Pending) {
+                it.copy(
+                    ownerName = newOwnerName,
+                    hasOwnerNameWarning = false,
+                )
+            } else it
+        }
+    }
+
+    fun cancelAdopt() {
+        _adoptDialogState.update { AdoptDialogState.Hidden }
+    }
+
+    fun adopt() {
+        var state = adoptDialogState.value
+        if (state is AdoptDialogState.Pending) {
+            if (state.ownerName.isBlank()) state = state.copy(hasOwnerNameWarning = true)
+
+            val newState = state
+            if (!newState.hasOwnerNameWarning) {
+                viewModelScope.launch {
+                    database.adoptPet(
+                        petId = org.mongodb.kbson.ObjectId(newState.pet.id),
+                        ownerName = newState.ownerName,
+                    )
+                }
+                state = AdoptDialogState.Hidden
+            }
+        }
+        _adoptDialogState.update { state }
+    }
 
     suspend fun initiateRemove(pet: Pet): Boolean {
         _removeDialogState.update { RemoveDialogState.Pending(pet) }
