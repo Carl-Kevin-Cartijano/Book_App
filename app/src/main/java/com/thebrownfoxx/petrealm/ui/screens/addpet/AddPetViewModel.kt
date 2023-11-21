@@ -76,7 +76,7 @@ class AddPetViewModel(private val database: PetRealmDatabase) : ViewModel() {
         if (state.petType == null) state = state.copy(hasPetTypeWarning = true)
 
         val newState = state
-        if (!state.hasWarning) {
+        if (!newState.hasWarning) {
             viewModelScope.launch {
                 database.addPet(
                     name = newState.petName,
