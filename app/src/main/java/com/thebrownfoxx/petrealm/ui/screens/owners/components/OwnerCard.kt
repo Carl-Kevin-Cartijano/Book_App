@@ -47,7 +47,7 @@ fun ColumnScope.OwnerCardContent(
             )
         }
     }
-    AnimatedVisibility(visible = expanded) {
+    AnimatedVisibility(visible = expanded && onInitiateRemove != null) {
         Surface(tonalElevation = Elevation.level(2)) {
             Column(
                 modifier = Modifier
