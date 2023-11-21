@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.twotone.Pets
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -14,13 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thebrownfoxx.components.HorizontalSpacer
-import com.thebrownfoxx.petrealm.R
 import com.thebrownfoxx.petrealm.models.Pet
 import com.thebrownfoxx.petrealm.models.Sample
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
@@ -45,11 +40,7 @@ fun PetCard(
                 .fillMaxWidth(),
         ) {
             Icon(
-                imageVector = when (petType) {
-                    "Cat" -> ImageVector.vectorResource(R.drawable.cat)
-                    "Dog" -> ImageVector.vectorResource(R.drawable.dog)
-                    else -> Icons.TwoTone.Pets
-                },
+                imageVector = petType.icon,
                 contentDescription = null,
                 modifier = Modifier.size(32.dp)
             )

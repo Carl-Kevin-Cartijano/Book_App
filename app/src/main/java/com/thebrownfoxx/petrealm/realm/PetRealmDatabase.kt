@@ -74,5 +74,17 @@ class PetRealmDatabase {
         }
     }
 
+    suspend fun deleteOwner(id: ObjectId) {
+        withContext(Dispatchers.IO) {
+            realm.write {
+                query<RealmOwner>("id == $0", id)
+                    .first()
+                    .find()
+                    ?.let { delete(it) }
+                    ?: throw IllegalStateException("Owner not found!")
+            }
+        }
+    }
+
     fun getAllOwners(): Flow<List<RealmOwner>> = realm.query<RealmOwner>().asFlow().map { it.list }
 }
