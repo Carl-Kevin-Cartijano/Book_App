@@ -1,5 +1,6 @@
 package com.thebrownfoxx.petrealm.ui.screens.pets
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.items
@@ -15,12 +16,13 @@ import androidx.compose.ui.unit.dp
 import com.thebrownfoxx.petrealm.models.Pet
 import com.thebrownfoxx.petrealm.models.Sample
 import com.thebrownfoxx.petrealm.ui.components.SearchableLazyColumnScreen
-import com.thebrownfoxx.petrealm.ui.screens.pets.components.SwipeablePetCard
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.RemovePetDialog
+import com.thebrownfoxx.petrealm.ui.screens.pets.components.SwipeablePetCard
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogState
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PetsScreen(
     pets: List<Pet>,
@@ -47,11 +49,15 @@ fun PetsScreen(
             }
         }
     ) {
-        items(pets) { pet ->
+        items(
+            items = pets,
+            key = { it.id }
+        ) { pet ->
             SwipeablePetCard(
                 pet = pet,
                 onInitiateRemove = { removePetDialogStateChangeListener.onInitiateRemovePet(pet) },
-                contentPadding = PaddingValues(horizontal = 16.dp)
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                modifier = Modifier.animateItemPlacement(),
             )
         }
     }
