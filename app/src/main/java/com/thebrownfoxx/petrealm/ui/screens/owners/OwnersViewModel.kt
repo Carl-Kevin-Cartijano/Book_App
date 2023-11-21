@@ -56,8 +56,8 @@ class OwnersViewModel(private val database: PetRealmDatabase) : ViewModel() {
         _searchQuery.update { newQuery }
     }
 
-    fun updateSelectedOwner(newSelectedOwner: Owner?) {
-        _selectedOwner.update { newSelectedOwner }
+    fun updateSelectedOwner(owner: Owner?) {
+        _selectedOwner.update { owner }
     }
 
     suspend fun initiateRemove(owner: Owner): Boolean {
