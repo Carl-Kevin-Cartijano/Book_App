@@ -1,6 +1,6 @@
 package com.thebrownfoxx.petrealm.models
 
-data class Pet (
+data class Pet(
     val id: String = "",
     val name: String,
     val age: Int,

@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.thebrownfoxx.petrealm.models.Pet
 import com.thebrownfoxx.petrealm.models.Sample
 import com.thebrownfoxx.petrealm.ui.components.SearchableLazyColumnScreen
-import com.thebrownfoxx.petrealm.ui.screens.pets.components.PetCard
+import com.thebrownfoxx.petrealm.ui.screens.pets.components.SwipeablePetCard
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.RemovePetDialog
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogState
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.RemovePetDialogStateChangeListener
@@ -48,7 +48,7 @@ fun PetsScreen(
         }
     ) {
         items(pets) { pet ->
-            PetCard(
+            SwipeablePetCard(
                 pet = pet,
                 onInitiateRemove = { removePetDialogStateChangeListener.onInitiateRemovePet(pet) },
                 contentPadding = PaddingValues(horizontal = 16.dp)
