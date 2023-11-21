@@ -15,7 +15,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,11 +38,12 @@ import com.thebrownfoxx.components.extension.top
 import com.thebrownfoxx.petrealm.models.PetType
 import com.thebrownfoxx.petrealm.ui.components.PetCard
 import com.thebrownfoxx.petrealm.ui.components.TextField
+import com.thebrownfoxx.petrealm.ui.components.bringIntoViewOnFocus
 import com.thebrownfoxx.petrealm.ui.components.indicationlessClickable
 import com.thebrownfoxx.petrealm.ui.screens.pets.components.PetTypeDropdownMenu
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun AddPetScreen(
     petTypes: List<PetType>,
@@ -46,6 +52,7 @@ fun AddPetScreen(
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val (first, second, third, fourth, fifth) = remember { FocusRequester.createRefs() }
     val focusManger = LocalFocusManager.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
@@ -90,6 +97,10 @@ fun AddPetScreen(
                 onValueChange = stateChangeListener.onPetNameChange,
                 required = true,
                 error = if (state.hasPetNameWarning) "Required" else null,
+                modifier = Modifier
+                    .bringIntoViewOnFocus()
+                    .focusRequester(first)
+                    .focusProperties { next = second },
             )
             VerticalSpacer(height = 16.dp)
             Row {
@@ -100,7 +111,11 @@ fun AddPetScreen(
                     required = true,
                     error = if (state.hasPetAgeWarning) "Required" else null,
                     numeric = true,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .bringIntoViewOnFocus()
+                        .focusRequester(second)
+                        .focusProperties { next = third },
                 )
                 HorizontalSpacer(width = 16.dp)
                 PetTypeDropdownMenu(
@@ -110,7 +125,11 @@ fun AddPetScreen(
                     onExpandedChange = stateChangeListener.onPetTypeDropdownExpandedChange,
                     onPetTypeChange = stateChangeListener.onPetTypeChange,
                     hasWarning = state.hasPetTypeWarning,
-                    modifier = Modifier.weight(2f),
+                    modifier = Modifier
+                        .weight(2f)
+                        .bringIntoViewOnFocus()
+                        .focusRequester(third)
+                        .focusProperties { next = fourth },
                 )
             }
             VerticalSpacer(height = 16.dp)
@@ -118,12 +137,19 @@ fun AddPetScreen(
                 label = "Owner name",
                 value = state.ownerName,
                 onValueChange = stateChangeListener.onOwnerNameChange,
+                modifier = Modifier
+                    .bringIntoViewOnFocus()
+                    .focusRequester(fourth)
+                    .focusProperties { next = fifth },
             )
             VerticalSpacer(height = 16.dp)
             FilledButton(
                 text = "Register",
                 onClick = stateChangeListener.onAddPet,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(fifth)
+                    .focusProperties { next = first },
             )
             VerticalSpacer(height = padding.bottom)
         }

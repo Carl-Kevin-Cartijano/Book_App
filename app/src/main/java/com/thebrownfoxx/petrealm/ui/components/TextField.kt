@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
@@ -42,7 +43,9 @@ fun TextField(
             isError = error != null,
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
-            keyboardOptions = KeyboardOptions.Default.run {
+            keyboardOptions = KeyboardOptions.Default
+                .copy(imeAction = ImeAction.Next)
+                .run {
                 if (numeric) copy(keyboardType = KeyboardType.Number)
                 else this
             }
