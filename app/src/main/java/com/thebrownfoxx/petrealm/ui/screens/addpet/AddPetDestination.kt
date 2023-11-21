@@ -1,6 +1,7 @@
 package com.thebrownfoxx.petrealm.ui.screens.addpet
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -18,6 +19,12 @@ fun AddPet(navigator: DestinationsNavigator) {
     with(viewModel) {
         val petTypes by petTypes.collectAsStateWithLifecycle()
         val state by state.collectAsStateWithLifecycle()
+
+        LaunchedEffect(Unit) {
+            navigateUp.collect {
+                navigator.navigateUp()
+            }
+        }
 
         AddPetScreen(
             petTypes = petTypes,

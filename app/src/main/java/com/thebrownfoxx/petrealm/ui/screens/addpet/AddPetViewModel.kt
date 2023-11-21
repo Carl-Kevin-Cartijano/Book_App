@@ -5,12 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.hamthelegend.enchantmentorder.extensions.mapToStateFlow
 import com.thebrownfoxx.petrealm.models.PetType
 import com.thebrownfoxx.petrealm.realm.PetRealmDatabase
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddPetViewModel(private val database: PetRealmDatabase) : ViewModel() {
+    private val _navigateUp = MutableSharedFlow<Boolean>()
+    val navigateUp = _navigateUp.asSharedFlow()
+
     val petTypes = database.getAllPetTypes().mapToStateFlow(
         scope = viewModelScope,
         initialValue = emptyList(),
@@ -84,6 +89,7 @@ class AddPetViewModel(private val database: PetRealmDatabase) : ViewModel() {
                     typeId = org.mongodb.kbson.ObjectId(newState.petType!!.id),
                     ownerName = newState.ownerName,
                 )
+                _navigateUp.emit(true)
             }
         }
         _state.update { state }
