@@ -35,19 +35,21 @@ fun ColumnScope.OwnerCardContent(
     modifier: Modifier = Modifier,
     onInitiateRemove: (() -> Unit)? = null,
 ) {
+    val vetoedExpanded = expanded && (onInitiateRemove != null || owner.pets.isNotEmpty())
+    
     Column(modifier = modifier) {
         Text(
             text = owner.name,
             style = MaterialTheme.typography.titleMedium,
         )
-        AnimatedVisibility(visible = !expanded || owner.pets.isEmpty()) {
+        AnimatedVisibility(visible = !vetoedExpanded || owner.pets.isEmpty()) {
             Text(
                 text = "${owner.pets.size} ${if (owner.pets.size == 1) "pet" else "pets"}",
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
     }
-    AnimatedVisibility(visible = expanded && onInitiateRemove != null) {
+    AnimatedVisibility(visible = vetoedExpanded) {
         Surface(tonalElevation = Elevation.level(2)) {
             Column(
                 modifier = Modifier
