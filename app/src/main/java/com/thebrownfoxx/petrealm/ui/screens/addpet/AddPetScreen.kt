@@ -1,13 +1,12 @@
 package com.thebrownfoxx.petrealm.ui.screens.addpet
 
+import androidx.compose.animation.core.AnimationState
+import androidx.compose.animation.core.animateTo
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -55,9 +54,21 @@ fun AddPetScreen(
     onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val (first, second, third, fourth, fifth) = remember { FocusRequester.createRefs() }
+    val focusRequesters = remember { Array(5) { FocusRequester() } }
     val focusManger = LocalFocusManager.current
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
+    fun Modifier.fieldModifier(focusIndex: Int) = bringIntoViewOnFocus {
+        val topAppBarState = scrollBehavior.state
+        AnimationState(initialValue = topAppBarState.heightOffset).animateTo(
+            targetValue = topAppBarState.heightOffsetLimit,
+            animationSpec = scrollBehavior.snapAnimationSpec!!,
+        ) { topAppBarState.heightOffset = value }
+    }
+        .focusRequester(focusRequesters[focusIndex])
+        .focusProperties {
+            next = focusRequesters.getOrElse(focusIndex + 1) { focusRequesters.first() }
+        }
 
     Scaffold(
         modifier = Modifier
@@ -85,8 +96,8 @@ fun AddPetScreen(
             }
         },
     ) { contentPadding ->
-        val padding = contentPadding + PaddingValues(16.dp) + WindowInsets.ime.asPaddingValues()
-        
+        val padding = contentPadding + PaddingValues(16.dp)
+
         Column(
             modifier = modifier
                 .padding(start = padding.start, end = padding.end)
@@ -100,10 +111,7 @@ fun AddPetScreen(
                 onValueChange = stateChangeListener.onPetNameChange,
                 required = true,
                 error = if (state.hasPetNameWarning) "Required" else null,
-                modifier = Modifier
-                    .bringIntoViewOnFocus()
-                    .focusRequester(first)
-                    .focusProperties { next = second },
+                modifier = Modifier.fieldModifier(focusIndex = 0),
             )
             VerticalSpacer(height = 16.dp)
             Row {
@@ -116,9 +124,7 @@ fun AddPetScreen(
                     numeric = true,
                     modifier = Modifier
                         .weight(1f)
-                        .bringIntoViewOnFocus()
-                        .focusRequester(second)
-                        .focusProperties { next = third },
+                        .fieldModifier(focusIndex = 1),
                 )
                 HorizontalSpacer(width = 16.dp)
                 PetTypeDropdownMenu(
@@ -130,9 +136,7 @@ fun AddPetScreen(
                     hasWarning = state.hasPetTypeWarning,
                     modifier = Modifier
                         .weight(2f)
-                        .bringIntoViewOnFocus()
-                        .focusRequester(third)
-                        .focusProperties { next = fourth },
+                        .fieldModifier(focusIndex = 2),
                 )
             }
             VerticalSpacer(height = 16.dp)
@@ -140,10 +144,7 @@ fun AddPetScreen(
                 label = "Owner name",
                 value = state.ownerName,
                 onValueChange = stateChangeListener.onOwnerNameChange,
-                modifier = Modifier
-                    .bringIntoViewOnFocus()
-                    .focusRequester(fourth)
-                    .focusProperties { next = fifth },
+                modifier = Modifier.fieldModifier(focusIndex = 3),
             )
             VerticalSpacer(height = 16.dp)
             FilledButton(
@@ -151,8 +152,7 @@ fun AddPetScreen(
                 onClick = stateChangeListener.onAddPet,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .focusRequester(fifth)
-                    .focusProperties { next = first },
+                    .fieldModifier(focusIndex = 4),
             )
             VerticalSpacer(height = padding.bottom)
         }

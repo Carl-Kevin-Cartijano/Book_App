@@ -51,6 +51,11 @@ import com.thebrownfoxx.components.extension.Elevation
 import com.thebrownfoxx.components.extension.ExpandedTopBarPreview
 import kotlin.math.abs
 
+object ExpandedTopAppBar {
+    val PinnedHeight = 64.dp
+    val MaxHeight = 256.dp
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpandedTopAppBar(
@@ -63,15 +68,12 @@ fun ExpandedTopAppBar(
     pinCollapsedContent: Boolean = false,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    val pinnedHeight = 64.dp
-    val maxHeight = 256.dp
-
     val pinnedHeightPx: Float
     val maxHeightPx: Float
 
     with(LocalDensity.current) {
-        pinnedHeightPx = pinnedHeight.toPx()
-        maxHeightPx = maxHeight.toPx()
+        pinnedHeightPx = ExpandedTopAppBar.PinnedHeight.toPx()
+        maxHeightPx = ExpandedTopAppBar.MaxHeight.toPx()
     }
 
     SideEffect {
@@ -157,7 +159,7 @@ fun ExpandedTopAppBar(
                                     ?: 0f)).toDp()
                             }
                         )
-                        .padding(top = pinnedHeight)
+                        .padding(top = ExpandedTopAppBar.PinnedHeight)
                         .fillMaxWidth()
                         .graphicsLayer { alpha = contentAlpha }
                         .zIndex(1f),
@@ -169,7 +171,7 @@ fun ExpandedTopAppBar(
                 }
                 Box(
                     modifier = Modifier
-                        .height(pinnedHeight)
+                        .height(ExpandedTopAppBar.PinnedHeight)
                         .fillMaxWidth(),
                 ) {
                     if (navigationIcon != null) {
@@ -211,15 +213,12 @@ fun ExpandedTopAppBar(
     pinCollapsedContent: Boolean = false,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    val pinnedHeight = 64.dp
-    val maxHeight = 256.dp
-
     val pinnedHeightPx: Float
     val maxHeightPx: Float
 
     with(LocalDensity.current) {
-        pinnedHeightPx = pinnedHeight.toPx()
-        maxHeightPx = maxHeight.toPx()
+        pinnedHeightPx = ExpandedTopAppBar.PinnedHeight.toPx()
+        maxHeightPx = ExpandedTopAppBar.MaxHeight.toPx()
     }
 
     SideEffect {
@@ -292,7 +291,7 @@ fun ExpandedTopAppBar(
                                     ?: 0f)).toDp()
                             }
                         )
-                        .padding(top = pinnedHeight)
+                        .padding(top = ExpandedTopAppBar.PinnedHeight)
                         .fillMaxWidth()
                         .graphicsLayer { alpha = contentAlpha }
                         .zIndex(1f),
@@ -303,7 +302,7 @@ fun ExpandedTopAppBar(
                     }
                 }
                 Row(
-                    modifier = Modifier.height(pinnedHeight),
+                    modifier = Modifier.height(ExpandedTopAppBar.PinnedHeight),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Box(

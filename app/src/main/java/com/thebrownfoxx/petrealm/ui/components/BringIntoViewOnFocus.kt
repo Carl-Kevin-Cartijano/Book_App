@@ -12,7 +12,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
-fun Modifier.bringIntoViewOnFocus() = composed {
+fun Modifier.bringIntoViewOnFocus(onFocus: suspend () -> Unit = {}) = composed {
     val bringIntoViewRequester = remember { BringIntoViewRequester() }
     val coroutineScope = rememberCoroutineScope()
     bringIntoViewRequester(bringIntoViewRequester)
@@ -21,6 +21,7 @@ fun Modifier.bringIntoViewOnFocus() = composed {
                 coroutineScope.launch {
                     // This sends a request to all parents that asks them to scroll so
                     // that this item is brought into view.
+                    onFocus()
                     bringIntoViewRequester.bringIntoView()
                 }
             }

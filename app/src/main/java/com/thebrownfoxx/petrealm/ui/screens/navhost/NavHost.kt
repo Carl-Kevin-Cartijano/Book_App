@@ -3,9 +3,8 @@ package com.thebrownfoxx.petrealm.ui.screens.navhost
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,7 +16,7 @@ import androidx.compose.ui.platform.LocalDensity
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
-import com.thebrownfoxx.components.extension.minus
+import com.thebrownfoxx.components.extension.Zero
 import com.thebrownfoxx.petrealm.ui.components.getDefaultTransitions
 
 @OptIn(ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class)
@@ -29,7 +28,8 @@ fun NavHost(modifier: Modifier = Modifier) {
     var navigationBarGraph by rememberSaveable { mutableStateOf(NavigationBarGraph.Pet) }
 
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.imePadding(),
+        contentWindowInsets = WindowInsets.Zero,
         bottomBar = {
             NavigationBar(
                 currentNavGraph = navigationBarGraph,
@@ -41,9 +41,7 @@ fun NavHost(modifier: Modifier = Modifier) {
             DestinationsNavHost(
                 engine = engine,
                 navGraph = graph.graph,
-                modifier = Modifier.padding(
-                    contentPadding - WindowInsets.systemBars.asPaddingValues()
-                ),
+                modifier = Modifier.padding(contentPadding),
             )
         }
     }

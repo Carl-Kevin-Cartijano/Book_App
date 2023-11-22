@@ -3,6 +3,7 @@ package com.thebrownfoxx.petrealm.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import com.thebrownfoxx.components.extension.Zero
 import com.thebrownfoxx.components.extension.plus
 
 fun <T> List<T>?.getListState(emptyText: String) = when {
@@ -53,6 +55,7 @@ fun SearchableLazyColumnScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         floatingActionButton = floatingActionButton,
         bottomBar = bottomBar,
+        contentWindowInsets = WindowInsets.Zero,
         topBar = {
             SearchTopBar(
                 searchQuery = searchQuery,
