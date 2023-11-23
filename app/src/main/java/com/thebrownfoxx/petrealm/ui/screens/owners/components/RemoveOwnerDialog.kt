@@ -28,7 +28,7 @@ fun RemoveOwnerDialog(
                 Column {
                     Text(
                         text = "Are you sure you want to unregister this owner? " +
-                                "All their pets will be unowned",
+                                "All their pets will be unowned.",
                     )
                     VerticalSpacer(height = 16.dp)
                     OwnerCard(
