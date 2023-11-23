@@ -75,7 +75,7 @@ fun EditPetScreen(
             .indicationlessClickable { focusManger.clearFocus() },
         topBar = {
             ExpandedTopAppBar(
-                collapsedContent = { Text(text = "Register pet") },
+                collapsedContent = { Text(text = "Edit pet") },
                 navigationIcon = {
                     IconButton(
                         imageVector = Icons.TwoTone.ArrowBack,
@@ -147,7 +147,7 @@ fun EditPetScreen(
             )
             VerticalSpacer(height = 16.dp)
             FilledButton(
-                text = "Register",
+                text = "Save",
                 onClick = stateChangeListener.onEditPet,
                 modifier = Modifier
                     .fillMaxWidth()

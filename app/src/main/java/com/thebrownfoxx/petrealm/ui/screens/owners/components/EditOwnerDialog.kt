@@ -66,7 +66,7 @@ fun EditOwnerDialog(
             },
             confirmButton = {
                 FilledButton(
-                    text = "Adopt",
+                    text = "Save",
                     onClick = stateChangeListener.onSave,
                 )
             }
