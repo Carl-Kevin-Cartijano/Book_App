@@ -48,7 +48,7 @@ fun PetCardContent(
     trailingIcon: @Composable () -> Unit = {},
 ) {
     val ownerLabel =
-        if (ownerName.isNotEmpty()) "${ownerName}'s ${petType.lowercase().ifEmpty { "pet" }}"
+        if (ownerName.isNotBlank()) "${ownerName}'s ${petType.lowercase().ifEmpty { "pet" }}"
         else "Unowned ${petType.lowercase().ifEmpty { "animal" }}"
 
     Row(
@@ -64,7 +64,7 @@ fun PetCardContent(
         Column(modifier = Modifier.weight(1f)) {
             Row {
                 Text(
-                    text = petName.ifEmpty { "Pet name" },
+                    text = petName.ifBlank { "Pet name" },
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Text(

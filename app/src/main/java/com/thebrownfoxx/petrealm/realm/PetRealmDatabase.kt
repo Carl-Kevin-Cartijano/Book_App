@@ -3,7 +3,6 @@ package com.thebrownfoxx.petrealm.realm
 import com.thebrownfoxx.petrealm.realm.models.RealmOwner
 import com.thebrownfoxx.petrealm.realm.models.RealmPet
 import com.thebrownfoxx.petrealm.realm.models.RealmPetType
-import com.thebrownfoxx.petrealm.utils.Encryptor
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
@@ -21,7 +20,7 @@ class PetRealmDatabase {
             copyToRealm(RealmPetType().apply { name = "Cat" })
             copyToRealm(RealmPetType().apply { name = "Dog" })
         }
-        .encryptionKey(Encryptor.getEncryptedData())
+//        .encryptionKey(Encryptor.getEncryptedData())
         .build()
     private val realm: Realm = Realm.open(config)
 
@@ -47,7 +46,7 @@ class PetRealmDatabase {
                     this.type = petType?.let { findLatest(petType) }
                 }
                 val managedPet = copyToRealm(pet)
-                if (ownerName.isNotEmpty()) {
+                if (ownerName.isNotBlank()) {
                     val ownerResult: RealmOwner? =
                         realm.query<RealmOwner>("name == $0", ownerName).first().find()
                     if (ownerResult == null) {
@@ -74,7 +73,7 @@ class PetRealmDatabase {
             realm.write {
                 val pet = realm.query<RealmPet>("id == $0", petId).first().find()
                 val managedPet = findLatest(pet!!)!!
-                if (ownerName.isNotEmpty()) {
+                if (ownerName.isNotBlank()) {
                     val ownerResult: RealmOwner? =
                         realm.query<RealmOwner>("name == $0", ownerName).first().find()
                     if (ownerResult == null) {
@@ -116,7 +115,7 @@ class PetRealmDatabase {
                 if (oldOwner != null) {
                     findLatest(oldOwner)?.pets?.remove(findLatest(managedPet))
                 }
-                if (ownerName.isNotEmpty()) {
+                if (ownerName.isNotBlank()) {
                     val ownerResult: RealmOwner? =
                         realm.query<RealmOwner>("name == $0", ownerName).first().find()
                     if (ownerResult == null) {
