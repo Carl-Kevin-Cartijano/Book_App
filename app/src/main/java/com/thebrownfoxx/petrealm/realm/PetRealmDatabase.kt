@@ -131,7 +131,7 @@ class PetRealmDatabase {
                         findLatest(managedPet)?.owner = findLatest(ownerResult)
                     }
                 } else {
-                    managedPet.owner = null
+                    findLatest(managedPet)?.owner = null
                 }
             }
         }
