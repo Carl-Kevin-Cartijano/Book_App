@@ -28,6 +28,8 @@ class PetRealmDatabase {
 
     fun getAllPets(): Flow<List<RealmPet>> = realm.query<RealmPet>().asFlow().map { it.list }
 
+    fun getPet(petId: ObjectId) = realm.query<RealmPet>("id == $0", petId).first().find()
+
     suspend fun addPet(
         name: String,
         age: Int,
@@ -85,6 +87,49 @@ class PetRealmDatabase {
                         managedOwner?.pets?.add(managedPet)
                         findLatest(managedPet)?.owner = managedOwner
                     }
+                }
+            }
+        }
+    }
+
+    suspend fun editPet(
+        petId: ObjectId,
+        name: String,
+        age: Int,
+        typeId: ObjectId,
+        ownerName: String = "",
+    ) {
+        withContext(Dispatchers.IO) {
+            realm.write {
+                val managedPet = realm.query<RealmPet>("id == $0", petId).first().find()!!
+
+                val petType = realm.query<RealmPetType>("id == $0", typeId).first().find()!!
+                findLatest(managedPet)?.apply {
+                    this.name = name
+                    this.age = age
+                    this.type = findLatest(petType)
+                }
+
+                val oldOwner = managedPet.owner
+                if (oldOwner != null) {
+                    findLatest(oldOwner)?.pets?.remove(findLatest(managedPet))
+                }
+                if (ownerName.isNotEmpty()) {
+                    val ownerResult: RealmOwner? =
+                        realm.query<RealmOwner>("name == $0", ownerName).first().find()
+                    if (ownerResult == null) {
+                        val owner = RealmOwner().apply {
+                            this.name = ownerName
+                            this.pets.add(findLatest(managedPet)!!)
+                        }
+                        val managedOwner = copyToRealm(owner)
+                        findLatest(managedPet)?.owner = findLatest(managedOwner)
+                    } else {
+                        findLatest(ownerResult)?.pets?.add(findLatest(managedPet)!!)
+                        findLatest(managedPet)?.owner = findLatest(ownerResult)
+                    }
+                } else {
+                    managedPet.owner = null
                 }
             }
         }

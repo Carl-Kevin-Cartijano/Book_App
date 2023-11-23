@@ -9,6 +9,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.thebrownfoxx.petrealm.application
 import com.thebrownfoxx.petrealm.ui.components.RemoveDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.screens.destinations.AddPetDestination
+import com.thebrownfoxx.petrealm.ui.screens.destinations.EditPetDestination
 import com.thebrownfoxx.petrealm.ui.screens.navhost.PetNavGraph
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.AdoptDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.screens.pets.state.PetsViewModel
@@ -40,7 +41,7 @@ fun Pets(navigator: DestinationsNavigator) {
                 onCancelAdopt = ::cancelAdopt,
                 onAdopt = ::adopt,
             ),
-            onEditPet = { TODO() },
+            onEditPet = { navigator.navigate(EditPetDestination(it.id)) },
             removeDialogState = removeDialogState,
             removeDialogStateChangeListener = RemoveDialogStateChangeListener(
                 onInitiateRemove = ::initiateRemove,
