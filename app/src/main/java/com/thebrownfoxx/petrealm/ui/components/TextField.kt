@@ -23,6 +23,7 @@ fun TextField(
     modifier: Modifier = Modifier,
     label: String? = null,
     error: String? = null,
+    isError: Boolean = error != null,
     enabled: Boolean = true,
     required: Boolean = false,
     numeric: Boolean = false,
@@ -40,7 +41,7 @@ fun TextField(
                 }
             },
             enabled = enabled,
-            isError = error != null,
+            isError = isError,
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions.Default

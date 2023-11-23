@@ -3,7 +3,8 @@ package com.thebrownfoxx.petrealm.ui.screens.owners.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,11 +51,13 @@ fun EditOwnerDialog(
                         value = state.newOwnerName,
                         onValueChange = stateChangeListener.onOwnerNameChange,
                         required = true,
+                        isError = state.hasWarning,
                     )
                     Text(
-                        text = "Required",
-                        style = MaterialTheme.typography.labelSmall,
+                        text = if (state.ownerNameDuplicate) "Owners cannot have the same name" else "Required",
+                        style = typography.labelSmall,
                         modifier = Modifier.padding(start = 16.dp, top = 4.dp),
+                        color = if (state.hasWarning) colorScheme.error else colorScheme.onSurface
                     )
                 }
             },

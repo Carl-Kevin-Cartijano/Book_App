@@ -53,7 +53,7 @@ fun ColumnScope.OwnerCardContent(
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = owner.name,
+                text = owner.name.ifBlank { "Owner name" },
                 style = MaterialTheme.typography.titleMedium,
             )
             AnimatedVisibility(visible = !vetoedExpanded || owner.pets.isEmpty()) {

@@ -8,13 +8,17 @@ sealed class EditOwnerDialogState {
         val owner: Owner,
         val newOwnerName: String,
         val hasOwnerNameWarning: Boolean,
-    ) : EditOwnerDialogState()
+        val ownerNameDuplicate: Boolean,
+    ) : EditOwnerDialogState() {
+        val hasWarning = hasOwnerNameWarning || ownerNameDuplicate
+    }
 
     companion object {
         fun Pending(owner: Owner) = Pending(
             owner = owner,
             newOwnerName = owner.name,
             hasOwnerNameWarning = false,
+            ownerNameDuplicate = false,
         )
     }
 }

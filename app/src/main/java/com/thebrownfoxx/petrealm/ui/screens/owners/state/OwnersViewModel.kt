@@ -74,6 +74,7 @@ class OwnersViewModel(private val database: PetRealmDatabase) : ViewModel() {
                 it.copy(
                     newOwnerName = newOwnerName,
                     hasOwnerNameWarning = false,
+                    ownerNameDuplicate = false,
                 )
             } else it
         }
@@ -87,9 +88,11 @@ class OwnersViewModel(private val database: PetRealmDatabase) : ViewModel() {
         var state = editDialogState.value
         if (state is EditOwnerDialogState.Pending) {
             if (state.newOwnerName.isBlank()) state = state.copy(hasOwnerNameWarning = true)
+            if (state.newOwnerName in (owners.value?.map { it.name } ?: listOf()))
+                state = state.copy(ownerNameDuplicate = true)
 
             val newState = state
-            if (!newState.hasOwnerNameWarning) {
+            if (!newState.hasWarning) {
                 viewModelScope.launch {
                     database.editOwner(
                         id = org.mongodb.kbson.ObjectId(newState.owner.id),
