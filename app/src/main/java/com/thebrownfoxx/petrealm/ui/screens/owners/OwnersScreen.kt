@@ -9,14 +9,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.thebrownfoxx.petrealm.ui.screens.owners.components.RemoveOwnerDialog
 import com.thebrownfoxx.petrealm.models.Owner
 import com.thebrownfoxx.petrealm.models.Sample
 import com.thebrownfoxx.petrealm.ui.components.RemoveDialogState
 import com.thebrownfoxx.petrealm.ui.components.RemoveDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.components.SearchableLazyColumnScreen
 import com.thebrownfoxx.petrealm.ui.components.getListState
+import com.thebrownfoxx.petrealm.ui.screens.owners.components.EditOwnerDialog
+import com.thebrownfoxx.petrealm.ui.screens.owners.components.RemoveOwnerDialog
 import com.thebrownfoxx.petrealm.ui.screens.owners.components.SwipeableOwnerCard
+import com.thebrownfoxx.petrealm.ui.screens.owners.state.EditOwnerDialogState
+import com.thebrownfoxx.petrealm.ui.screens.owners.state.EditOwnerDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -27,6 +30,8 @@ fun OwnersScreen(
     onSelectedOwnerChange: (Owner?) -> Unit,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
+    editDialogState: EditOwnerDialogState,
+    editDialogStateChangeListener: EditOwnerDialogStateChangeListener,
     removeDialogState: RemoveDialogState<Owner>,
     removeDialogStateChangeListener: RemoveDialogStateChangeListener<Owner>,
     modifier: Modifier = Modifier,
@@ -52,12 +57,17 @@ fun OwnersScreen(
                 onClick = {
                     if (!selected) onSelectedOwnerChange(owner) else onSelectedOwnerChange(null)
                 },
+                onEdit = { editDialogStateChangeListener.onInitiateEdit(owner) },
                 onInitiateRemove = { removeDialogStateChangeListener.onInitiateRemove(owner) },
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = Modifier.animateItemPlacement(),
             )
         }
     }
+    EditOwnerDialog(
+        state = editDialogState,
+        stateChangeListener = editDialogStateChangeListener,
+    )
     RemoveOwnerDialog(
         state = removeDialogState,
         stateChangeListener = removeDialogStateChangeListener,
@@ -66,7 +76,7 @@ fun OwnersScreen(
 
 @Preview
 @Composable
-fun OwnerScreenPreview() {
+fun OwnersScreenPreview() {
     AppTheme {
         OwnersScreen(
             owners = Sample.Owners,
@@ -74,6 +84,13 @@ fun OwnerScreenPreview() {
             onSelectedOwnerChange = {},
             searchQuery = "",
             onSearchQueryChange = {},
+            editDialogState = EditOwnerDialogState.Hidden,
+            editDialogStateChangeListener = EditOwnerDialogStateChangeListener(
+                onInitiateEdit = {},
+                onOwnerNameChange = {},
+                onCancelEdit = {},
+                onSave = {},
+            ),
             removeDialogState = RemoveDialogState.Hidden(),
             removeDialogStateChangeListener = RemoveDialogStateChangeListener(
                 onInitiateRemove = { true },

@@ -8,6 +8,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.thebrownfoxx.petrealm.application
 import com.thebrownfoxx.petrealm.ui.components.RemoveDialogStateChangeListener
 import com.thebrownfoxx.petrealm.ui.screens.navhost.OwnerNavGraph
+import com.thebrownfoxx.petrealm.ui.screens.owners.state.EditOwnerDialogStateChangeListener
+import com.thebrownfoxx.petrealm.ui.screens.owners.state.OwnersViewModel
 
 @OwnerNavGraph(start = true)
 @Destination
@@ -19,6 +21,7 @@ fun Owners() {
         val owners by owners.collectAsStateWithLifecycle()
         val selectedOwner by selectedOwner.collectAsStateWithLifecycle()
         val searchQuery by searchQuery.collectAsStateWithLifecycle()
+        val editDialogState by editDialogState.collectAsStateWithLifecycle()
         val removeDialogState by removeDialogState.collectAsStateWithLifecycle()
 
         OwnersScreen(
@@ -27,6 +30,13 @@ fun Owners() {
             onSelectedOwnerChange = ::updateSelectedOwner,
             searchQuery = searchQuery,
             onSearchQueryChange = ::updateSearchQuery,
+            editDialogState = editDialogState,
+            editDialogStateChangeListener = EditOwnerDialogStateChangeListener(
+                onInitiateEdit = ::initiateEdit,
+                onOwnerNameChange = ::updateOwnerName,
+                onCancelEdit = ::cancelEdit,
+                onSave = ::saveEdit,
+            ),
             removeDialogState = removeDialogState,
             removeDialogStateChangeListener = RemoveDialogStateChangeListener(
                 onInitiateRemove = ::initiateRemove,

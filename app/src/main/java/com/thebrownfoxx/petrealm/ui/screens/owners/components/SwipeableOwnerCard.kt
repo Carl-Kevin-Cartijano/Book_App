@@ -24,6 +24,7 @@ fun SwipeableOwnerCard(
     owner: Owner,
     expanded: Boolean,
     onClick: () -> Unit,
+    onEdit: () -> Unit,
     onInitiateRemove: suspend () -> Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -47,7 +48,8 @@ fun SwipeableOwnerCard(
                 owner = owner,
                 expanded = expanded,
                 onClick = onClick,
-                onInitiateRemove = {
+                onEdit = onEdit,
+                onRemove = {
                     scope.launch {
                         dismissState.dismiss(DismissDirection.StartToEnd)
                         if (dismissState.currentValue != DismissValue.Default) {
@@ -70,6 +72,7 @@ fun SwipeableOwnerPreview() {
             owner = Sample.Owner,
             expanded = false,
             onClick = {},
+            onEdit = {},
             onInitiateRemove = { true },
             contentPadding = PaddingValues(16.dp),
         )

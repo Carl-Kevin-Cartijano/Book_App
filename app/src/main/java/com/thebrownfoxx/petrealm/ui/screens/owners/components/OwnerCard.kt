@@ -1,12 +1,19 @@
 package com.thebrownfoxx.petrealm.ui.screens.owners.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.Edit
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,8 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.thebrownfoxx.components.FilledTonalButton
 import com.thebrownfoxx.components.HorizontalSpacer
+import com.thebrownfoxx.components.IconButton
 import com.thebrownfoxx.components.VerticalSpacer
 import com.thebrownfoxx.components.extension.Elevation
+import com.thebrownfoxx.components.extension.minus
 import com.thebrownfoxx.petrealm.models.Owner
 import com.thebrownfoxx.petrealm.models.Sample
 import com.thebrownfoxx.petrealm.ui.components.icon
@@ -33,19 +42,37 @@ fun ColumnScope.OwnerCardContent(
     owner: Owner,
     expanded: Boolean,
     modifier: Modifier = Modifier,
-    onInitiateRemove: (() -> Unit)? = null,
+    onRemove: (() -> Unit)? = null,
+    onEdit: (() -> Unit)? = null,
 ) {
-    val vetoedExpanded = expanded && (onInitiateRemove != null || owner.pets.isNotEmpty())
-    
-    Column(modifier = modifier) {
-        Text(
-            text = owner.name,
-            style = MaterialTheme.typography.titleMedium,
-        )
-        AnimatedVisibility(visible = !vetoedExpanded || owner.pets.isEmpty()) {
+    val vetoedExpanded = expanded && (onRemove != null || owner.pets.isNotEmpty())
+
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = "${owner.pets.size} ${if (owner.pets.size == 1) "pet" else "pets"}",
-                style = MaterialTheme.typography.bodyMedium,
+                text = owner.name,
+                style = MaterialTheme.typography.titleMedium,
+            )
+            AnimatedVisibility(visible = !vetoedExpanded || owner.pets.isEmpty()) {
+                Text(
+                    text = "${owner.pets.size} ${if (owner.pets.size == 1) "pet" else "pets"}",
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+        }
+        HorizontalSpacer(width = 16.dp)
+        AnimatedVisibility(
+            visible = expanded && onEdit != null,
+            enter = expandIn() + fadeIn(),
+            exit = shrinkOut() + fadeOut(),
+        ) {
+            IconButton(
+                imageVector = Icons.TwoTone.Edit,
+                contentDescription = null,
+                onClick = { onEdit?.invoke() },
             )
         }
     }
@@ -76,15 +103,15 @@ fun ColumnScope.OwnerCardContent(
                                 )
                             }
                         }
-                        if (onInitiateRemove != null) {
+                        if (onRemove != null) {
                             VerticalSpacer(height = 16.dp)
                         }
                     }
                 }
-                if (onInitiateRemove != null) {
+                if (onRemove != null) {
                     FilledTonalButton(
                         text = "Remove",
-                        onClick = onInitiateRemove,
+                        onClick = onRemove,
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.filledTonalButtonColors(
                             containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -103,7 +130,8 @@ fun OwnerCard(
     owner: Owner,
     expanded: Boolean,
     onClick: () -> Unit,
-    onInitiateRemove: () -> Unit,
+    onEdit: () -> Unit,
+    onRemove: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -113,9 +141,10 @@ fun OwnerCard(
         OwnerCardContent(
             owner = owner,
             expanded = expanded,
-            onInitiateRemove = onInitiateRemove,
+            onEdit = onEdit,
+            onRemove = onRemove,
             modifier = Modifier
-                .padding(16.dp)
+                .padding(PaddingValues(16.dp) - PaddingValues(end = 8.dp))
                 .fillMaxWidth(),
         )
     }
@@ -147,7 +176,8 @@ fun OwnerCardPreview() {
             owner = Sample.Owner,
             expanded = false,
             onClick = {},
-            onInitiateRemove = {},
+            onEdit = {},
+            onRemove = {},
         )
     }
 }
@@ -160,7 +190,8 @@ fun OwnerCardExpandedPreview() {
             owner = Sample.Owner,
             expanded = true,
             onClick = {},
-            onInitiateRemove = {},
+            onEdit = {},
+            onRemove = {},
         )
     }
 }

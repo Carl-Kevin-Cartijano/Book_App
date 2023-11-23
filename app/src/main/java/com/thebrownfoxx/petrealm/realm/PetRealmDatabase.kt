@@ -147,6 +147,15 @@ class PetRealmDatabase {
         }
     }
 
+    suspend fun editOwner(id: ObjectId, newOwnerName: String) {
+        withContext(Dispatchers.IO) {
+            realm.write {
+                val owner = query<RealmOwner>("id == $0", id).first().find()!!
+                findLatest(owner)!!.name = newOwnerName
+            }
+        }
+    }
+
     suspend fun deleteOwner(id: ObjectId) {
         withContext(Dispatchers.IO) {
             realm.write {

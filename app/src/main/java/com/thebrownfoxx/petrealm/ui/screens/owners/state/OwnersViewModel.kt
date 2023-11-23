@@ -1,4 +1,4 @@
-package com.thebrownfoxx.petrealm.ui.screens.owners
+package com.thebrownfoxx.petrealm.ui.screens.owners.state
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -45,6 +45,10 @@ class OwnersViewModel(private val database: PetRealmDatabase) : ViewModel() {
         }.search(searchQuery) { it.name }
     }
 
+    private val _editDialogState =
+        MutableStateFlow<EditOwnerDialogState>(EditOwnerDialogState.Hidden)
+    val editDialogState = _editDialogState.asStateFlow()
+
     private val _selectedOwner = MutableStateFlow<Owner?>(null)
     val selectedOwner = _selectedOwner.asStateFlow()
 
@@ -58,6 +62,44 @@ class OwnersViewModel(private val database: PetRealmDatabase) : ViewModel() {
 
     fun updateSelectedOwner(owner: Owner?) {
         _selectedOwner.update { owner }
+    }
+
+    fun initiateEdit(owner: Owner) {
+        _editDialogState.update { EditOwnerDialogState.Pending(owner) }
+    }
+
+    fun updateOwnerName(newOwnerName: String) {
+        _editDialogState.update {
+            if (it is EditOwnerDialogState.Pending) {
+                it.copy(
+                    newOwnerName = newOwnerName,
+                    hasOwnerNameWarning = false,
+                )
+            } else it
+        }
+    }
+
+    fun cancelEdit() {
+        _editDialogState.update { EditOwnerDialogState.Hidden }
+    }
+
+    fun saveEdit() {
+        var state = editDialogState.value
+        if (state is EditOwnerDialogState.Pending) {
+            if (state.newOwnerName.isBlank()) state = state.copy(hasOwnerNameWarning = true)
+
+            val newState = state
+            if (!newState.hasOwnerNameWarning) {
+                viewModelScope.launch {
+                    database.editOwner(
+                        id = org.mongodb.kbson.ObjectId(newState.owner.id),
+                        newOwnerName = newState.newOwnerName,
+                    )
+                }
+                state = EditOwnerDialogState.Hidden
+            }
+        }
+        _editDialogState.update { state }
     }
 
     suspend fun initiateRemove(owner: Owner): Boolean {
