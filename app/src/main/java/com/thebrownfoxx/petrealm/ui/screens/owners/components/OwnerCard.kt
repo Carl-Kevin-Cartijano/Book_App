@@ -85,10 +85,6 @@ fun ColumnScope.OwnerCardContent(
             ) {
                 AnimatedVisibility(visible = owner.pets.isNotEmpty()) {
                     Column {
-                        Text(
-                            text = "Pets",
-                            style = MaterialTheme.typography.titleSmall,
-                        )
                         for (pet in owner.pets) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Icon(
