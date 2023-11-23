@@ -57,7 +57,7 @@ fun EditOwnerDialog(
                         text = if (state.ownerNameDuplicate) "Owners cannot have the same name" else "Required",
                         style = typography.labelSmall,
                         modifier = Modifier.padding(start = 16.dp, top = 4.dp),
-                        color = if (state.hasWarning) colorScheme.error else colorScheme.onSurface
+                        color = if (state.hasWarning) colorScheme.error else colorScheme.onSurface,
                     )
                 }
             },
