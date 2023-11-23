@@ -141,7 +141,7 @@ fun PetCard(
                         onClick = onEdit,
                     )
                 }
-            }
+            },
         )
         AnimatedVisibility(visible = expanded) {
             Surface(tonalElevation = Elevation.level(2)) {
