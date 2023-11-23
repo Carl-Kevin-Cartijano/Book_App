@@ -106,7 +106,7 @@ fun ColumnScope.OwnerCardContent(
                 }
                 if (onRemove != null) {
                     FilledTonalButton(
-                        text = "Remove",
+                        text = "Unregister",
                         onClick = onRemove,
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.filledTonalButtonColors(

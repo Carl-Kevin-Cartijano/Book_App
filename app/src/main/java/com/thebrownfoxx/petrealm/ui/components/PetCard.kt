@@ -151,7 +151,7 @@ fun PetCard(
                         .fillMaxWidth(),
                 ) {
                     FilledTonalButton(
-                        text = "Remove",
+                        text = "Unregister",
                         onClick = onRemove,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.filledTonalButtonColors(

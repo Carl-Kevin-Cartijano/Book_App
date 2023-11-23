@@ -19,8 +19,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.thebrownfoxx.components.extension.Zero
 import com.thebrownfoxx.components.extension.plus
 
-fun <T> List<T>?.getListState(emptyText: String) = when {
+fun <T> List<T>?.getListState(emptyText: String, searching: Boolean) = when {
     this == null -> ListState.Loading
+    isEmpty() && searching -> ListState.NoSearchResults
     isEmpty() -> ListState.Empty(text = emptyText)
     else -> ListState.Loaded
 }
@@ -28,6 +29,7 @@ fun <T> List<T>?.getListState(emptyText: String) = when {
 sealed class ListState {
     data object Loading : ListState()
     data class Empty(val text: String) : ListState()
+    data object NoSearchResults : ListState()
     data object Loaded : ListState()
 }
 
@@ -71,11 +73,17 @@ fun SearchableLazyColumnScreen(
             ListState.Loading -> LoadingIndicator(
                 modifier = Modifier.padding(scaffoldContentPadding),
             )
+
             is ListState.Empty -> EmptyList(
                 text = listState.text,
                 modifier = Modifier.padding(scaffoldContentPadding),
             )
-            else -> LazyColumn(
+
+            ListState.NoSearchResults -> NoSearchResults(
+                modifier = Modifier.padding(scaffoldContentPadding),
+            )
+
+            ListState.Loaded -> LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 content = content,
                 contentPadding = scaffoldContentPadding + contentPadding,

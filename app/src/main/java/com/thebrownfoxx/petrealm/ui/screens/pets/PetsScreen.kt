@@ -49,7 +49,10 @@ fun PetsScreen(
         onSearchQueryChange = onSearchQueryChange,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(vertical = 16.dp),
-        listState = pets.getListState("No pets registered"),
+        listState = pets.getListState(
+            emptyText = "No pets registered",
+            searching = searchQuery != "",
+        ),
         floatingActionButton = {
             FloatingActionButton(onClick = onAddPet) {
                 Icon(imageVector = Icons.TwoTone.Add, contentDescription = null)

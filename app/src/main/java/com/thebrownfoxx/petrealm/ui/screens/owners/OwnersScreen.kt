@@ -43,7 +43,10 @@ fun OwnersScreen(
         onSearchQueryChange = onSearchQueryChange,
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(vertical = 16.dp),
-        listState = owners.getListState("No owners registered"),
+        listState = owners.getListState(
+            emptyText = "No owners registered",
+            searching = searchQuery != "",
+        ),
     ) {
         items(
             items = owners ?: emptyList(),
