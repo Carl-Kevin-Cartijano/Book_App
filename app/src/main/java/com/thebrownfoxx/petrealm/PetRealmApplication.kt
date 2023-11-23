@@ -5,13 +5,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.thebrownfoxx.petrealm.realm.PetRealmDatabase
 
-class PetRealmApplication: Application() {
+class PetRealmApplication : Application() {
     lateinit var database: PetRealmDatabase
         private set
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         database = PetRealmDatabase()
+    }
+
+    companion object {
+        lateinit var instance: Application
+            private set
     }
 }
 

@@ -3,6 +3,7 @@ package com.thebrownfoxx.petrealm.realm
 import com.thebrownfoxx.petrealm.realm.models.RealmOwner
 import com.thebrownfoxx.petrealm.realm.models.RealmPet
 import com.thebrownfoxx.petrealm.realm.models.RealmPetType
+import com.thebrownfoxx.petrealm.utils.Encryptor
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
@@ -20,6 +21,7 @@ class PetRealmDatabase {
             copyToRealm(RealmPetType().apply { name = "Cat" })
             copyToRealm(RealmPetType().apply { name = "Dog" })
         }
+        .encryptionKey(Encryptor.getEncryptedData())
         .build()
     private val realm: Realm = Realm.open(config)
 

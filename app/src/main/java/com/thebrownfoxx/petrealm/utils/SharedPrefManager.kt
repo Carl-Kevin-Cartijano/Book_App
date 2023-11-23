@@ -1,15 +1,14 @@
 package com.thebrownfoxx.petrealm.utils
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.thebrownfoxx.petrealm.PetRealmApplication
 
 object SharedPrefManager {
     private const val PREFERENCE_NAME = "MyAppPreferences"
-    private lateinit var application: Application
 
     private val sharedPreferences : SharedPreferences by lazy {
-        application.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
+        PetRealmApplication.instance.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE)
     }
 
     fun putString(key: String, value : String){

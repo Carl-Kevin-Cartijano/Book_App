@@ -53,7 +53,7 @@ object Encryptor {
 
     }
 
-    fun getEncryptedData(): ByteArray{
+    fun getEncryptedData(): ByteArray {
         val eData = SharedPrefManager.getString("REALMKEY", "")
         val ivData = SharedPrefManager.getString("REALMKEYIV", "")
 
@@ -77,7 +77,7 @@ object Encryptor {
         }
     }
 
-    fun getRandomKey(seed: Long? = null): ByteArray {
+    private fun getRandomKey(seed: Long? = null): ByteArray {
         // generate a new 64-byte encryption key
         val key = ByteArray(64)
         if (seed != null) {
