@@ -26,6 +26,7 @@ fun SwipeablePetCard(
     expanded: Boolean,
     onClick: () -> Unit,
     onInitiateAdopt: () -> Unit,
+    onEdit: () -> Unit,
     onInitiateRemove: suspend () -> Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -50,7 +51,8 @@ fun SwipeablePetCard(
                 expanded = expanded,
                 onClick = onClick,
                 onAdopt = onInitiateAdopt,
-                onInitiateRemove = {
+                onEdit = onEdit,
+                onRemove = {
                     scope.launch {
                         dismissState.dismiss(DismissDirection.StartToEnd)
                         if (dismissState.currentValue != DismissValue.Default) {
@@ -74,6 +76,7 @@ fun PetCardPreview() {
             expanded = true,
             onClick = {},
             onInitiateAdopt = {},
+            onEdit = {},
             onInitiateRemove = { true },
             contentPadding = PaddingValues(16.dp),
         )

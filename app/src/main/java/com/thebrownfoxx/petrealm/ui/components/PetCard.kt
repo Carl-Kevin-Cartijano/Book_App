@@ -1,11 +1,19 @@
 package com.thebrownfoxx.petrealm.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkOut
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.Edit
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,7 +31,9 @@ import androidx.compose.ui.unit.dp
 import com.thebrownfoxx.components.FilledButton
 import com.thebrownfoxx.components.FilledTonalButton
 import com.thebrownfoxx.components.HorizontalSpacer
+import com.thebrownfoxx.components.IconButton
 import com.thebrownfoxx.components.extension.Elevation
+import com.thebrownfoxx.components.extension.minus
 import com.thebrownfoxx.petrealm.models.Pet
 import com.thebrownfoxx.petrealm.models.Sample
 import com.thebrownfoxx.petrealm.ui.theme.AppTheme
@@ -35,6 +45,7 @@ fun PetCardContent(
     petType: String,
     ownerName: String,
     modifier: Modifier = Modifier,
+    trailingIcon: @Composable () -> Unit = {},
 ) {
     val ownerLabel =
         if (ownerName.isNotEmpty()) "${ownerName}'s ${petType.lowercase().ifEmpty { "pet" }}"
@@ -67,6 +78,10 @@ fun PetCardContent(
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
+        HorizontalSpacer(width = 16.dp)
+        Box {
+            trailingIcon()
+        }
     }
 }
 
@@ -98,7 +113,8 @@ fun PetCard(
     expanded: Boolean,
     onClick: () -> Unit,
     onAdopt: () -> Unit,
-    onInitiateRemove: () -> Unit,
+    onEdit: () -> Unit,
+    onRemove: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -111,8 +127,21 @@ fun PetCard(
             petType = pet.type.name,
             ownerName = pet.owner?.name ?: "",
             modifier = Modifier
-                .padding(16.dp)
+                .padding(PaddingValues(16.dp) - PaddingValues(end = 8.dp))
                 .fillMaxWidth(),
+            trailingIcon = {
+                AnimatedVisibility(
+                    visible = expanded,
+                    enter = expandIn() + fadeIn(),
+                    exit = shrinkOut() + fadeOut(),
+                ) {
+                    IconButton(
+                        imageVector = Icons.TwoTone.Edit,
+                        contentDescription = null,
+                        onClick = onEdit,
+                    )
+                }
+            }
         )
         AnimatedVisibility(visible = expanded) {
             Surface(tonalElevation = Elevation.level(2)) {
@@ -123,7 +152,7 @@ fun PetCard(
                 ) {
                     FilledTonalButton(
                         text = "Remove",
-                        onClick = onInitiateRemove,
+                        onClick = onRemove,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.filledTonalButtonColors(
                             containerColor = colorScheme.errorContainer,
@@ -153,7 +182,8 @@ fun PetCardPreview() {
             expanded = false,
             onClick = {},
             onAdopt = {},
-            onInitiateRemove = {},
+            onEdit = {},
+            onRemove = {},
             modifier = Modifier.padding(16.dp),
         )
     }
@@ -168,7 +198,8 @@ fun PetCardExpandedPreview() {
             expanded = true,
             onClick = {},
             onAdopt = {},
-            onInitiateRemove = {},
+            onEdit = {},
+            onRemove = {},
             modifier = Modifier.padding(16.dp),
         )
     }

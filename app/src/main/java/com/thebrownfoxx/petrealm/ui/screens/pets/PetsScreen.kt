@@ -34,9 +34,10 @@ fun PetsScreen(
     onSelectedPetChange: (Pet?) -> Unit,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    addPet: () -> Unit,
+    onAddPet: () -> Unit,
     adoptDialogState: AdoptDialogState,
     adoptDialogStateChangeListener: AdoptDialogStateChangeListener,
+    onEditPet: (Pet) -> Unit,
     removeDialogState: RemoveDialogState<Pet>,
     removeDialogStateChangeListener: RemoveDialogStateChangeListener<Pet>,
     modifier: Modifier = Modifier,
@@ -50,7 +51,7 @@ fun PetsScreen(
         contentPadding = PaddingValues(vertical = 16.dp),
         listState = pets.getListState("No pets registered"),
         floatingActionButton = {
-            FloatingActionButton(onClick = addPet) {
+            FloatingActionButton(onClick = onAddPet) {
                 Icon(imageVector = Icons.TwoTone.Add, contentDescription = null)
             }
         }
@@ -68,6 +69,7 @@ fun PetsScreen(
                     if (!selected) onSelectedPetChange(pet) else onSelectedPetChange(null)
                 },
                 onInitiateAdopt = { adoptDialogStateChangeListener.onInitiateAdopt(pet) },
+                onEdit = { onEditPet(pet) },
                 onInitiateRemove = { removeDialogStateChangeListener.onInitiateRemove(pet) },
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 modifier = Modifier.animateItemPlacement(),
@@ -94,7 +96,7 @@ fun PetsScreenPreview() {
             onSelectedPetChange = {},
             searchQuery = "",
             onSearchQueryChange = {},
-            addPet = {},
+            onAddPet = {},
             adoptDialogState = AdoptDialogState.Hidden,
             adoptDialogStateChangeListener = AdoptDialogStateChangeListener(
                 onInitiateAdopt = {},
@@ -102,6 +104,7 @@ fun PetsScreenPreview() {
                 onOwnerNameChange = {},
                 onAdopt = {},
             ),
+            onEditPet = {},
             removeDialogState = RemoveDialogState.Hidden(),
             removeDialogStateChangeListener = RemoveDialogStateChangeListener(
                 onInitiateRemove = { true },

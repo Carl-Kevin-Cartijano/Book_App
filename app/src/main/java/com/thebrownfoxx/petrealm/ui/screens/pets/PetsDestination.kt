@@ -23,8 +23,6 @@ fun Pets(navigator: DestinationsNavigator) {
         val pets by pets.collectAsStateWithLifecycle()
         val selectedPet by selectedPet.collectAsStateWithLifecycle()
         val searchQuery by searchQuery.collectAsStateWithLifecycle()
-        /*val petTypes by petTypes.collectAsStateWithLifecycle()
-        val addPetDialogState by addPetDialogState.collectAsStateWithLifecycle()*/
         val adoptDialogState by adoptDialogState.collectAsStateWithLifecycle()
         val removeDialogState by removeDialogState.collectAsStateWithLifecycle()
 
@@ -34,19 +32,7 @@ fun Pets(navigator: DestinationsNavigator) {
             onSelectedPetChange = ::updateSelectedPet,
             searchQuery = searchQuery,
             onSearchQueryChange = ::updateSearchQuery,
-            addPet = { navigator.navigate(AddPetDestination) },
-            /*petTypes = petTypes,
-            addPetDialogState = addPetDialogState,
-            addPetDialogStateChangeListener = AddPetDialogStateChangeListener(
-                onShowAddPetDialog = ::showAddPetDialog,
-                onHideAddPetDialog = ::hideAddPetDialog,
-                onPetNameChange = ::updatePetName,
-                onPetAgeChange = ::updatePetAge,
-                onPetTypeDropdownExpandedChange = ::updatePetTypeDropdownExpanded,
-                onPetTypeChange = ::updatePetType,
-                onOwnerNameChange = ::updateOwnerName,
-                onAddPet = ::addPet
-            ),*/
+            onAddPet = { navigator.navigate(AddPetDestination) },
             adoptDialogState = adoptDialogState,
             adoptDialogStateChangeListener = AdoptDialogStateChangeListener(
                 onInitiateAdopt = ::initiateAdopt,
@@ -54,6 +40,7 @@ fun Pets(navigator: DestinationsNavigator) {
                 onCancelAdopt = ::cancelAdopt,
                 onAdopt = ::adopt,
             ),
+            onEditPet = { TODO() },
             removeDialogState = removeDialogState,
             removeDialogStateChangeListener = RemoveDialogStateChangeListener(
                 onInitiateRemove = ::initiateRemove,
