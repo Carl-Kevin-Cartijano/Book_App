@@ -13,8 +13,8 @@ android {
         applicationId = "com.thebrownfoxx.petrealm"
         minSdk = 27
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.1"
+        versionCode = 2
+        versionName = "0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
